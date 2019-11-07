@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task</title>
+    <script src="jspsych-6.1.0/jspsych.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-slider-response-modified.js"></script>
+    <script src="Slides.js"></script>
+    <script src="Image_repository.js"></script>
+    <link rel="stylesheet" href="jspsych-6.1.0/css/jspsych.css" />
+</head>
+<body>
+<script>
+
+    //Choosing condition randomly
+    const cond0 = '0';
+    const cond1 = '1';
+    const condition = (Math.floor(Math.random() * 2) == 0)?cond0:cond1;
+
+    //Shuffling and choosing the pictures
+    //todo
+
+    //temporarily
+    const IMAGES_TO_LOAD = ['1460.jpg'];
+
+    //initializing the exp
+    timeline = [firstCond,fixation,selfCond,fixation,otherCond, fixation];
+    jsPsych.init({
+        timeline: timeline,
+        preload_images: IMAGES_TO_LOAD
+    });
+</script>
+
+</body>
+</html>
