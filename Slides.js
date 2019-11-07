@@ -58,6 +58,7 @@ var firstCond= {
             slider: true,
             locked: false,
             key_press: 'space',
+            labels: ['-100', '100'],
         }
     ]
 };
