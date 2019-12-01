@@ -3,29 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Task</title>
+    <script>
+        const FASTMODE = true;
+    </script>
     <script src="jspsych-6.1.0/jspsych.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-html-slider-response-modified.js"></script>
-    <script src="Slides.js"></script>
     <script src="Image_repository.js"></script>
+    <script src="Slides.js"></script>
     <link rel="stylesheet" href="jspsych-6.1.0/css/jspsych.css" />
 </head>
 <body>
 <script>
-
     //Choosing condition randomly
     const cond0 = '0';
     const cond1 = '1';
     const condition = (Math.floor(Math.random() * 2) == 0)?cond0:cond1;
 
-    //Shuffling and choosing the pictures
-    //todo
+    var allImages = POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS).concat(TRAINING_NEG_IMAGES_OBJS).concat(TRAINING_POS_IMAGES_OBJS);
+    var IMAGES_TO_LOAD = [];
 
-    //temporarily
-    const IMAGES_TO_LOAD = ['1460.jpg'];
+    for (var i=0; i<allImages.length; i++) {
+        IMAGES_TO_LOAD.push('stimuli/'+allImages[i].index+'.jpg');
+    }
+
+    var firstCondResponses = [];
 
     //initializing the exp
-    timeline = [firstCond,fixation,selfCond,fixation,otherCond, fixation];
+    timeline = [firstCond,selfCond,otherCond];
     jsPsych.init({
         timeline: timeline,
         preload_images: IMAGES_TO_LOAD

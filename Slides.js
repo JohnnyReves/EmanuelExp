@@ -11,11 +11,12 @@ var fixation = {
 };
 
 
-var selfCond= {
-    type: 'html-slider-response-modified',
-    stimulus: '<div style="margin: auto;">' +
-        '<img src="1460.jpg" style="width: 500px;" />' +
-        '</div>',
+var firstCond = {
+    timeline:[{type: 'html-slider-response-modified',
+    stimulus: function () {
+        return '<div style="margin: auto;">' +
+        '<img src="stimuli/'+jsPsych.timelineVariable('index', true)+'.jpg" style="width: 500px;" />' +
+        '</div>';},
     blocks: [
         {
             text: '',
@@ -24,70 +25,101 @@ var selfCond= {
             duration: 5000
         },
         {
-            text: 'please respond, press the space bar to continue',
+            text: 'Please respond',
             slider: true,
             locked: false,
             key_press: 'space',
-        },
-        {
-            text: 'This is your response:',
-            slider: true,
-            locked: true,
-            key_press: 'space',
-            slider_color: 'red',
-            start: '$1$'
+            require_response: true
         }
-    ]
+    ],
+    labels: ['-100', '100'],
+    post_trial_gap: 1000,
+    on_finish: function (data) {
+        firstCondResponses.push(data.response[1].slider);
+    }},fixation],
+    timeline_variables: FASTMODE?(TRAINING_POS_IMAGES_OBJS.concat(TRAINING_NEG_IMAGES_OBJS)).slice(0,2):
+                                 TRAINING_POS_IMAGES_OBJS.concat(TRAINING_NEG_IMAGES_OBJS),
+    randomize_order: true
 };
 
 
-var firstCond= {
-    type: 'html-slider-response-modified',
-    stimulus: '<div style="margin: auto;">' +
-        '<img src="1460.jpg" style="width: 500px;" />' +
-        '</div>',
-    blocks: [
-        {
-            text: '',
-            slider: false,
-            locked: false,
-            duration: 5000
-        },
-        {
-            text: 'please respond, press the space bar to continue',
-            slider: true,
-            locked: false,
-            key_press: 'space',
-            labels: ['-100', '100'],
-        }
-    ]
+var selfCond = {
+    timeline:[{type: 'html-slider-response-modified',
+        stimulus: function () {
+            return '<div style="margin: auto;">' +
+                '<img src="stimuli/'+jsPsych.timelineVariable('index', true)+'.jpg" style="width: 500px;" />' +
+                '</div>';},
+        blocks: [
+            {
+                text: '',
+                slider: false,
+                locked: false,
+                duration: 5000
+            },
+            {
+                text: 'Please respond',
+                slider: true,
+                locked: false,
+                key_press: 'space',
+                require_response: true
+            },
+            {
+                text: 'This is your response:',
+                slider: true,
+                locked: true,
+                key_press: 'space',
+                slider_color: 'red',
+                start: '$1$'
+            },
+        ],
+        labels: ['-100', '100'],
+        post_trial_gap: 1000,
+        data: function(){return {
+            Image: jsPsych.timelineVariable('index', true),
+            Valence: parseFloat(jsPsych.timelineVariable('mean', true))>0?'Positive':'Negative'
+        };}},fixation],
+    timeline_variables: FASTMODE?(POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS)).slice(0,2):
+                                 POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS),
+    randomize_order: true
 };
 
-var otherCond= {
-    type: 'html-slider-response-modified',
-    stimulus: '<div style="margin: auto;">' +
-        '<img src="1460.jpg" style="width: 500px;" />' +
-        '</div>',
-    blocks: [
-        {
-            text: '<span style="font-size: 40px;">Mister Poopy Butthole</span>',
-            slider: false,
-            locked: false,
-            duration: 5000
-        },
-        {
-            text: 'How would mr poopy butthole rate this',
-            slider: true,
-            locked: false,
-            key_press: 'space',
-        },
-        {
-            text: 'This was how they rated this:',
-            slider: true,
-            locked: true,
-            key_press: 'space',
-            slider_color: 'red',
-            start: '$1$/2'
-        }
-    ]
+
+var otherCond = {
+    timeline:[{type: 'html-slider-response-modified',
+        stimulus: function () {
+            return '<div style="margin: auto;">' +
+                '<img src="stimuli/'+jsPsych.timelineVariable('index', true)+'.jpg" style="width: 500px;" />' +
+                '</div>';},
+        blocks: [
+            {
+                text: '',
+                slider: false,
+                locked: false,
+                duration: 5000
+            },
+            {
+                text: 'How would '+name+' rate this',
+                slider: true,
+                locked: false,
+                key_press: 'space',
+                require_response: true
+            },
+            {
+                text: 'This is your response:',
+                slider: true,
+                locked: true,
+                key_press: 'space',
+                slider_color: 'red',
+                start: '$1$'
+            },
+        ],
+        labels: ['-100', '100'],
+        post_trial_gap: 1000,
+        data: function(){return {
+            Image: jsPsych.timelineVariable('index', true),
+            Valence: parseFloat(jsPsych.timelineVariable('mean', true))>0?'Positive':'Negative'
+        };}},fixation],
+    timeline_variables: FASTMODE?(POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS)).slice(0,2):
+                                 POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS),
+    randomize_order: true
 };
