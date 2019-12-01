@@ -41,6 +41,12 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
                         default: false,
                         description: 'Will the slider be presented'
                     },
+                    require_response: {
+                        type: jsPsych.plugins.parameterType.BOOL,
+                        pretty_name: 'Require response',
+                        default: false,
+                        description: 'Require response to move on'
+                    },
                     slider_color: {
                         type: jsPsych.plugins.parameterType.STRING,
                         pretty_name: 'Slider color',
@@ -147,16 +153,16 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
         //Add the css
         var html = '<style data="thumb">'+sliderCSS('black')+'</style>';
         //Set the structure
-        html += '<div id="jspsych-html-slider-response-wrapper" style="position: absolute; top: 50%; left:50%; height:600px; width:600px; transform: translate(-50%, -50%)">';
+        html += '<div id="jspsych-html-slider-response-wrapper" style="position: absolute; top: 50%; left:50%; height:625px; width:600px; transform: translate(-50%, -50%)">';
         html += '<div id="jspsych-html-slider-response-stimulus" style="position: relative; top:0%;">' + trial.stimulus + '</div>';
-        html += '<div id="jspsych-html-slider-response-block" style="position:relative; top: 10px; height: 200px; width: 100%;">';
-        html += '<div id="jspsych-html-slider-response-text" style="position: relative; top:0%; width: 100%; height: 100px;">gfdgfdgdfg</div>';
-        html += '<div class="jspsych-html-slider-response-container" style="position:relative; margin: 0 auto 3em auto; ';
+        html += '<div id="jspsych-html-slider-response-block" style="position:relative; top: 10px; height: 225px; width: 100%;">';
+        html += '<div id="jspsych-html-slider-response-text" style="position: relative; top:0%; width: 100%; height: 70px;"></div>';
+        html += '<div id="jspsych-html-slider-response-container" class="jspsych-html-slider-response-container" style="position:relative; margin: 0 auto 3em auto; visibility:hidden; ';
         if(trial.slider_width !== null){
             html += 'width:'+trial.slider_width+'px;';
         }
         html += '">';
-        html += '<input type="range" value="'+trial.blocks[0].start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%; visibility:hidden;" id="jspsych-html-slider-response-response" class="slider"></input>';
+        html += '<input type="range" value="'+trial.blocks[0].start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-html-slider-response-response" class="slider"></input>';
         html += '<div>'
         for(var j=0; j < trial.labels.length; j++){
             var width = 100/(trial.labels.length-1);
@@ -164,16 +170,25 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
             html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
             html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
             html += '</div>'
-        }
+        };
+        html += '<div style="font-size: 20px%; height:20px; position: relative;">Current value:<br><span  id="slider-value"></span></div>';
         html += '</div>';
         html += '</div>';
+        html += '<div id="additional-messages" style="visibility: hidden;"><div style="position: relative; top:0%; height:25px;" id="press-space">Please press the space-bar to continue</div>';
+        html += '<div style="position: relative; top:0%; height:25px;" id="error-msg"></div></div>';
         html += '</div>';
         html += '</div>';
 
 
         display_element.innerHTML = html;
 
+
+        display_element.querySelector('#jspsych-html-slider-response-response').addEventListener('input', function (e) {
+            display_element.querySelector('#slider-value').innerHTML = e.target.value;
+            responded = true;
+        });
         //Set the variables needed for running the blocks and saving information.
+        var responded;
         var keyboardListener;
         var response = [];
         var lastTime = performance.now();
@@ -188,18 +203,28 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
                 end_trial();
                 return;
             }
+            jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
             if (trial.blocks[i].duration != null) { //Set duration if needed
                 setTimeout(function () {nextBlock(i+1)}, trial.blocks[i].duration);
             }
             if (trial.blocks[i].key_press!=jsPsych.NO_KEYS) { //Set key to end block if needed
+                responded = !trial.blocks[i].require_response;
+                function check_if_responded(i) {
+                    if (responded) {nextBlock(i); return;}
+                    display_element.querySelector('#error-msg').innerHTML = 'You must move the slider in order to continue';
+                    display_element.querySelector('#error-msg').style.color = 'red';
+                    setTimeout(function () {
+                        display_element.querySelector('#error-msg').style.color = 'black'
+                    }, 10);
+                }
                 keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-                    callback_function: function (info) {nextBlock(i+1)},
+                    callback_function: function (info) {check_if_responded(i+1)},
                     valid_responses: [trial.blocks[i].key_press],
                     rt_method: 'performance',
-                    persist: false,
+                    persist: true,
                     allow_held_key: false
                 });
-            } else if (typeof keyboardListener !== "undefined") { //Kill previous keyboard-listened if exists
+            } else if (typeof keyboardListener !== "undefined") { //Kill previous keyboard-listener if exists
                 jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
             }
             if (trial.blocks[i].slider) { //If the slider is visible
@@ -210,13 +235,18 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
                 });
                 startFormula = eval(startFormula);
                 //Set the elements
-                display_element.querySelector('#jspsych-html-slider-response-response').style.visibility = 'visible';
+                display_element.querySelector('#jspsych-html-slider-response-container').style.visibility = 'visible';
+                display_element.querySelector('#additional-messages').style.visibility = 'visible';
                 display_element.querySelector('#jspsych-html-slider-response-response').value = startFormula;
+                display_element.querySelector('#error-msg').innerHTML = '';
+                display_element.querySelector('#slider-value').innerHTML = display_element.querySelector('#jspsych-html-slider-response-response').value;
                 display_element.querySelector('[data="thumb"]').innerHTML = sliderCSS(trial.blocks[i].slider_color);
                 display_element.querySelector('#jspsych-html-slider-response-response').disabled = trial.blocks[i].locked;
             }
             else { //Hide the slider if needed
-                display_element.querySelector('#jspsych-html-slider-response-response').style.visibility = 'hidden';
+                display_element.querySelector('#jspsych-html-slider-response-container').style.visibility = 'hidden';
+                display_element.querySelector('#additional-messages').style.visibility = 'hidden';
+
             } //Show text
             display_element.querySelector('#jspsych-html-slider-response-text').innerHTML = trial.blocks[i].text;
             lastTime = performance.now();
