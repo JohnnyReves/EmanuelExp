@@ -3,27 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Task</title>
+    <script src="jspsych-6.1.0/jspsych.js"></script>
+    <script src="Image_repository.js"></script>
     <script>
         const FASTMODE = true;
         //Choosing condition randomly
-  
+
         const cond0 = 'Moderate';
         const cond1 = 'Extreme';
         const condition = (Math.floor(Math.random() * 2) == 0) ? cond0 : cond1;
         console.log(condition)
-        
+        const experimentImages = jsPsych.randomization.repeat(POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS));
+        const selfCondImages = FASTMODE ? [NEGATIVE_IMAGES_OBJS[0],POSITIVE_IMAGES_OBJS[0]] :
+            experimentImages.slice(0, 50);
+        const otherCondImages = FASTMODE ? [NEGATIVE_IMAGES_OBJS[1],POSITIVE_IMAGES_OBJS[1]] :
+            experimentImages.slice(51, 100);
+
         //Initializing variables
-        var firstCondResponses = { Negative: [], Positive: []};
-        var firstCondDiffenece = {Negative: 0, Positive: 0};
+        var firstCondResponses = { Negative: [], Positive: [] };
+        var firstCondDiffenece = { Negative: 0, Positive: 0 };
         const positiveImageAverage = 38;
         const negativeImageAverage = -42;
 
     </script>
-    <script src="jspsych-6.1.0/jspsych.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-html-slider-response-modified.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-call-function.js"></script>
-    <script src="Image_repository.js"></script>
     <script src="logic.js"></script>
     <script src="Slides.js"></script>
     <link rel="stylesheet" href="jspsych-6.1.0/css/jspsych.css" />

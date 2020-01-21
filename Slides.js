@@ -22,7 +22,7 @@ var firstCond = {
             text: '',
             slider: false,
             locked: false,
-            duration: 5000
+            duration: FASTMODE? 500: 5000
         },
         {
             text: 'Please respond',
@@ -38,8 +38,9 @@ var firstCond = {
     post_trial_gap: 1000,
         on_finish: function (data) {
             firstCondResponses[data.valence].push(data.response[1].slider);
-    }},fixation],
-    timeline_variables: FASTMODE?TRAINING_NEG_IMAGES_OBJS.slice(0,2):
+        }
+    }, fixation],
+    timeline_variables: FASTMODE ? [TRAINING_NEG_IMAGES_OBJS[0], TRAINING_POS_IMAGES_OBJS[0]]:
                                  TRAINING_POS_IMAGES_OBJS.concat(TRAINING_NEG_IMAGES_OBJS),
     randomize_order: true
 };
@@ -56,7 +57,7 @@ var selfCond = {
                 text: '',
                 slider: false,
                 locked: false,
-                duration: 5000
+                duration: FASTMODE ? 500 : 5000
             },
             {
                 text: 'Please respond',
@@ -64,6 +65,12 @@ var selfCond = {
                 locked: false,
                 key_press: 'space',
                 require_response: true
+            },
+            {
+                text: '',
+                slider: false,
+                locked: false,
+                duration: 1000
             },
             {
                 text: 'This is your response:',
@@ -80,9 +87,10 @@ var selfCond = {
         data: function(){return {
             Image: jsPsych.timelineVariable('index', true),
             Valence: parseFloat(jsPsych.timelineVariable('mean', true))>0?'Positive':'Negative'
-        };}},fixation],
-    timeline_variables: FASTMODE?NEGATIVE_IMAGES_OBJS.slice(0,2):
-                                 POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS),
+        };
+        }
+    }, fixation],
+    timeline_variables: selfCondImages,
     randomize_order: true
 };
 
@@ -98,7 +106,7 @@ var otherCond = {
                 text: '',
                 slider: false,
                 locked: false,
-                duration: 5000
+                duration: FASTMODE? 500:5000
             },
             {
                 text: 'How would '+name+' rate this',
@@ -106,6 +114,12 @@ var otherCond = {
                 locked: false,
                 key_press: 'space',
                 require_response: true
+            },
+            {
+                text: '',
+                slider: false,
+                locked: false,
+                duration: 1000
             },
             {
                 text: 'This was their response:',
@@ -123,7 +137,6 @@ var otherCond = {
             Image: jsPsych.timelineVariable('index', true),
             Valence: parseFloat(jsPsych.timelineVariable('mean', true))>0?'Positive':'Negative'
         };}},fixation],
-    timeline_variables: FASTMODE?NEGATIVE_IMAGES_OBJS.slice(0,2):
-                                 POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS),
+    timeline_variables: otherCondImages,
     randomize_order: true
 };

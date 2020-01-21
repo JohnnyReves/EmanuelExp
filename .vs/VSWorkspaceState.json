@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\jspsych-6.1.0",
+    "\\jspsych-6.1.0\\plugins"
   ],
+  "SelectedNode": "\\jspsych-6.1.0\\plugins\\jspsych-html-slider-response-modified.js",
   "PreviewInSolutionExplorer": false
 }

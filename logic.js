@@ -11,7 +11,8 @@ var calculateFirstCondDiffenece = {
             console.log(sum)
             sum += parseFloat(firstCondResponses.Positive[i]);
         }
-        firstCondDiffenece.Positive = (sum / firstCondResponses.Positive.length)- positiveImageAverage;
+        firstCondDiffenece.Positive = (sum / firstCondResponses.Positive.length) - positiveImageAverage;
+        console.log(firstCondResponses);
     }
 }
 
