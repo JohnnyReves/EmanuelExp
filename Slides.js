@@ -90,8 +90,8 @@ var selfCond = {
         };
         }
     }, fixation],
-    timeline_variables: selfCondImages,
-    randomize_order: true
+    timeline_variables: experimentImages,
+    randomize_order: false
 };
 
 
@@ -137,6 +137,6 @@ var otherCond = {
             Image: jsPsych.timelineVariable('index', true),
             Valence: parseFloat(jsPsych.timelineVariable('mean', true))>0?'Positive':'Negative'
         };}},fixation],
-    timeline_variables: otherCondImages,
-    randomize_order: true
+    timeline_variables: experimentImages,
+    randomize_order: false
 };

@@ -12,12 +12,11 @@
         const cond0 = 'Moderate';
         const cond1 = 'Extreme';
         const condition = (Math.floor(Math.random() * 2) == 0) ? cond0 : cond1;
-        console.log(condition)
-        const experimentImages = jsPsych.randomization.repeat(POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS));
-        const selfCondImages = FASTMODE ? [NEGATIVE_IMAGES_OBJS[0],POSITIVE_IMAGES_OBJS[0]] :
-            experimentImages.slice(0, 50);
-        const otherCondImages = FASTMODE ? [NEGATIVE_IMAGES_OBJS[1],POSITIVE_IMAGES_OBJS[1]] :
-            experimentImages.slice(51, 100);
+        const stage2Cond = (Math.floor(Math.random() * 2) == 0) ? 'Self' : 'Other';
+
+
+        const experimentImages = FASTMODE ? [POSITIVE_IMAGES_OBJS[0], NEGATIVE_IMAGES_OBJS[0]] :
+            jsPsych.randomization.repeat(POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS), 1);
 
         //Initializing variables
         var firstCondResponses = { Negative: [], Positive: [] };
@@ -36,6 +35,10 @@
 <body>
 <script>
 
+    var stage2 = (stage2Cond == 'Self') ? selfCond : otherCond;
+
+    console.log(condition + ' ' + stage2Cond);
+
 
     var allImages = POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS).concat(TRAINING_NEG_IMAGES_OBJS).concat(TRAINING_POS_IMAGES_OBJS);
     var IMAGES_TO_LOAD = [];
@@ -45,7 +48,7 @@
     }
 
     //initializing the exp
-    timeline = [firstCond, calculateFirstCondDiffenece, selfCond, otherCond];
+    timeline = [firstCond, calculateFirstCondDiffenece, stage2];
     jsPsych.init({
         timeline: timeline,
         preload_images: IMAGES_TO_LOAD
