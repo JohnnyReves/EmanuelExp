@@ -1,4 +1,4 @@
-/**
+﻿/**
  * jspsych-html-slider-response
  * a jspsych plugin for free response survey questions
  *
@@ -162,19 +162,19 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
             html += 'width:'+trial.slider_width+'px;';
         }
         html += '">';
-        html += '<input type="range" value="'+trial.blocks[0].start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-html-slider-response-response" class="slider"></input>';
+        html += '<input type="range" value="'+trial.blocks[0].start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" dir="ltr" style="width: 100%;" id="jspsych-html-slider-response-response" class="slider"></input>';
         html += '<div>'
         for(var j=0; j < trial.labels.length; j++){
             var width = 100/(trial.labels.length-1);
             var left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
             html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
-            html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
+            html += '<span style="text-align: center; font-size: 80%;" dir="ltr">'+trial.labels[j]+'</span>';
             html += '</div>'
         };
-        html += '<div style="font-size: 20px%; height:20px; position: relative;">Current value:<br><span  id="slider-value"></span></div>';
+        html += '<div style="font-size: 20px%; height:20px; position: relative;">ערך נוכחי:<br><span  id="slider-value" dir="ltr"></span></div>';
         html += '</div>';
         html += '</div>';
-        html += '<div id="additional-messages" style="visibility: hidden;"><div style="position: relative; top:0%; height:25px;" id="press-space">Please press the space-bar to continue</div>';
+        html += '<div id="additional-messages" style="visibility: hidden;"><div style="position: relative; top:0%; height:25px;" id="press-space">יש להקיש על מקש הרווח כדי להמשיך</div>';
         html += '<div style="position: relative; top:0%; height:25px;" id="error-msg"></div></div>';
         html += '</div>';
         html += '</div>';
@@ -211,7 +211,7 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
                 responded = !trial.blocks[i].require_response;
                 function check_if_responded(i) {
                     if (responded) {nextBlock(i); return;}
-                    display_element.querySelector('#error-msg').innerHTML = 'You must move the slider in order to continue';
+                    display_element.querySelector('#error-msg').innerHTML = 'יש להזיז את הסמן על מנת להמשיך';
                     display_element.querySelector('#error-msg').style.color = 'red';
                     setTimeout(function () {
                         display_element.querySelector('#error-msg').style.color = 'black'

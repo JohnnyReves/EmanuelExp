@@ -1,4 +1,4 @@
-//Fixation slide
+﻿//Fixation slide
 var fixation = {
     type: 'html-keyboard-response',
     stimulus: '<div style="position: absolute; top:50%; left:50%; transform: translate(-50%,-50%);">' +
@@ -25,7 +25,7 @@ var firstCond = {
             duration: FASTMODE? 500: 5000
         },
         {
-            text: 'Please respond',
+            text: 'אנא דרגי את תגובתך לתמונה:',
             slider: true,
             locked: false,
             key_press: 'space',
@@ -73,7 +73,7 @@ var selfCond = {
                 duration: 1000
             },
             {
-                text: 'This is your response:',
+                text: 'זוהי תשובתך:',
                 slider: true,
                 locked: true,
                 key_press: 'space',
@@ -109,7 +109,7 @@ var otherCond = {
                 duration: FASTMODE? 500:5000
             },
             {
-                text: 'How would '+name+' rate this',
+                text: 'איך ' + jsPsych.timelineVariable('Name', true)+' תדרג את זה?',
                 slider: true,
                 locked: false,
                 key_press: 'space',
@@ -122,7 +122,7 @@ var otherCond = {
                 duration: 1000
             },
             {
-                text: 'This was their response:',
+                text: 'כך היא דרגה את זה:',
                 slider: true,
                 locked: true,
                 key_press: 'space',

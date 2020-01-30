@@ -5,6 +5,8 @@
     <title>Task</title>
     <script src="jspsych-6.1.0/jspsych.js"></script>
     <script src="Image_repository.js"></script>
+    <script src="Names.js"></script>
+
     <script>
         const FASTMODE = true;
         //Choosing condition randomly
@@ -15,8 +17,15 @@
         const stage2Cond = (Math.floor(Math.random() * 2) == 0) ? 'Self' : 'Other';
 
 
-        const experimentImages = FASTMODE ? [POSITIVE_IMAGES_OBJS[0], NEGATIVE_IMAGES_OBJS[0]] :
+        var experimentImages = FASTMODE ? [POSITIVE_IMAGES_OBJS[0], NEGATIVE_IMAGES_OBJS[0]] :
             jsPsych.randomization.repeat(POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS), 1);
+
+        const names = FASTMODE ? F_names.slice(0, 2) :
+            jsPsych.randomization.repeat(jsPsych.F_names.concat(M_names), 1)
+
+        for (var i = 0; i < experimentImages.length; i++) {
+            Object.assign(experimentImages[i],names[i])
+        }
 
         //Initializing variables
         var firstCondResponses = { Negative: [], Positive: [] };
@@ -32,7 +41,7 @@
     <script src="Slides.js"></script>
     <link rel="stylesheet" href="jspsych-6.1.0/css/jspsych.css" />
 </head>
-<body>
+<body dir="rtl">
 <script>
 
     var stage2 = (stage2Cond == 'Self') ? selfCond : otherCond;
