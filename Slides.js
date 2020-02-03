@@ -1,4 +1,14 @@
-﻿//Fixation slide
+﻿//The texts to be presented
+const pleaseRespondText = (gender == 'Male') ? 'אנא דרג את הרגש שהתמונה מעוררת בך' : 'אנא דרגי את הרגש שהתמונה מעוררת בך'
+const howDidTheyRespondText = function (name) {
+    return 'איך ' + name + ' ' + (gender == 'Male') ? 'ידרג את זה?' : 'תדרג את זה?';
+}
+const howTheyRatedText = function (name) {
+    return 'כך ' + name + ' ' + (gender == 'Male') ? 'דרג את זה.' : 'דרגה את זה.';
+}
+const thisIsYourResponseText = 'זוהי תשובתך:';
+
+//Fixation slide
 var fixation = {
     type: 'html-keyboard-response',
     stimulus: '<div style="position: absolute; top:50%; left:50%; transform: translate(-50%,-50%);">' +
@@ -9,7 +19,6 @@ var fixation = {
     post_trial_gap: 500,
     data: {test_part: 'fixation'}
 };
-
 
 var firstCond = {
     timeline:[{type: 'html-slider-response-modified',
@@ -25,7 +34,7 @@ var firstCond = {
             duration: FASTMODE? 500: 5000
         },
         {
-            text: 'אנא דרגי את תגובתך לתמונה:',
+            text: pleaseRespondText,
             slider: true,
             locked: false,
             key_press: 'space',
@@ -44,7 +53,7 @@ var firstCond = {
                                  TRAINING_POS_IMAGES_OBJS.concat(TRAINING_NEG_IMAGES_OBJS),
     randomize_order: true
 };
-
+    
 
 var selfCond = {
     timeline:[{type: 'html-slider-response-modified',
@@ -60,7 +69,7 @@ var selfCond = {
                 duration: FASTMODE ? 500 : 5000
             },
             {
-                text: 'Please respond',
+                text: pleaseRespondText,
                 slider: true,
                 locked: false,
                 key_press: 'space',
@@ -73,7 +82,7 @@ var selfCond = {
                 duration: 1000
             },
             {
-                text: 'זוהי תשובתך:',
+                text: thisIsYourResponseText,
                 slider: true,
                 locked: true,
                 key_press: 'space',
@@ -90,7 +99,7 @@ var selfCond = {
         };
         }
     }, fixation],
-    timeline_variables: experimentImages,
+    timeline_variables: experimentObjects,
     randomize_order: false
 };
 
@@ -109,7 +118,7 @@ var otherCond = {
                 duration: FASTMODE? 500:5000
             },
             {
-                text: 'איך ' + jsPsych.timelineVariable('Name', true)+' תדרג את זה?',
+                text: howDidTheyRespondText(jsPsych.timelineVariable('Name', true)),
                 slider: true,
                 locked: false,
                 key_press: 'space',
@@ -122,7 +131,7 @@ var otherCond = {
                 duration: 1000
             },
             {
-                text: 'כך היא דרגה את זה:',
+                text: howTheyRatedText,
                 slider: true,
                 locked: true,
                 key_press: 'space',
@@ -137,6 +146,6 @@ var otherCond = {
             Image: jsPsych.timelineVariable('index', true),
             Valence: parseFloat(jsPsych.timelineVariable('mean', true))>0?'Positive':'Negative'
         };}},fixation],
-    timeline_variables: experimentImages,
+    timeline_variables: experimentObjects,
     randomize_order: false
 };

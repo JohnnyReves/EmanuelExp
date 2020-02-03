@@ -11,20 +11,21 @@
         const FASTMODE = true;
         //Choosing condition randomly
 
+        const stage2Cond = (Math.floor(Math.random() * 2) == 0) ? 'Self' : 'Other';
         const cond0 = 'Moderate';
         const cond1 = 'Extreme';
         const condition = (Math.floor(Math.random() * 2) == 0) ? cond0 : cond1;
-        const stage2Cond = (Math.floor(Math.random() * 2) == 0) ? 'Self' : 'Other';
+        //TEMP
+        var gender = (Math.floor(Math.random() * 2) == 0) ? 'Male' : 'Female';
+        const experimentNames = (gender == 'Male') ? M_names : F_names;
 
-
-        var experimentImages = FASTMODE ? [POSITIVE_IMAGES_OBJS[0], NEGATIVE_IMAGES_OBJS[0]] :
+        var experimentObjects = FASTMODE ? [POSITIVE_IMAGES_OBJS[0], NEGATIVE_IMAGES_OBJS[0]] :
             jsPsych.randomization.repeat(POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS), 1);
 
-        const names = FASTMODE ? F_names.slice(0, 2) :
-            jsPsych.randomization.repeat(jsPsych.F_names.concat(M_names), 1)
+        const names = FASTMODE ? experimentNames.slice(0, 2) : experimentNames;
 
-        for (var i = 0; i < experimentImages.length; i++) {
-            Object.assign(experimentImages[i],names[i])
+        for (var i = 0; i < experimentObjects.length; i++) {
+            Object.assign(experimentObjects[i],names[i])
         }
 
         //Initializing variables
@@ -46,7 +47,7 @@
 
     var stage2 = (stage2Cond == 'Self') ? selfCond : otherCond;
 
-    console.log(condition + ' ' + stage2Cond);
+    console.log(stage2Cond + ' '+condition + ' ' + gender);
 
 
     var allImages = POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS).concat(TRAINING_NEG_IMAGES_OBJS).concat(TRAINING_POS_IMAGES_OBJS);
