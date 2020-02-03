@@ -1,10 +1,12 @@
 ﻿//The texts to be presented
 const pleaseRespondText = (gender == 'Male') ? 'אנא דרג את הרגש שהתמונה מעוררת בך' : 'אנא דרגי את הרגש שהתמונה מעוררת בך'
 const howDidTheyRespondText = function (name) {
-    return 'איך ' + name + ' ' + (gender == 'Male') ? 'ידרג את זה?' : 'תדרג את זה?';
+    var sentenceEnd = (gender == 'Male') ? 'ידרג את זה?' : 'תדרג את זה';
+    return 'איך ' + name + ' ' + sentenceEnd;
 }
 const howTheyRatedText = function (name) {
-    return 'כך ' + name + ' ' + (gender == 'Male') ? 'דרג את זה.' : 'דרגה את זה.';
+    var sentenceEnd = (gender == 'Male') ? 'דרג את זה.' : 'דרגה את זה.';
+    return 'כך ' + name + ' ' + sentenceEnd;
 }
 const thisIsYourResponseText = 'זוהי תשובתך:';
 
@@ -118,7 +120,7 @@ var otherCond = {
                 duration: FASTMODE? 500:5000
             },
             {
-                text: howDidTheyRespondText(jsPsych.timelineVariable('Name', true)),
+                text: howDidTheyRespondText(jsPsych.timelineVariable('name', true)),
                 slider: true,
                 locked: false,
                 key_press: 'space',

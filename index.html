@@ -25,7 +25,8 @@
         const names = FASTMODE ? experimentNames.slice(0, 2) : experimentNames;
 
         for (var i = 0; i < experimentObjects.length; i++) {
-            Object.assign(experimentObjects[i],names[i])
+            experimentObjects[i].name=names[i];
+            console.log(names[i]);
         }
 
         //Initializing variables
