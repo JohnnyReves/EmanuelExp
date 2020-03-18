@@ -1,14 +1,30 @@
 ﻿//The texts to be presented
-const pleaseRespondText = (gender == 'Male') ? 'אנא דרג את הרגש שהתמונה מעוררת בך' : 'אנא דרגי את הרגש שהתמונה מעוררת בך'
+const pleaseRespondText = (gender == 'Male') ? 'אנא דרג את הרגש שהתמונה מעוררת בך' : 'אנא דרגי את הרגש שהתמונה מעוררת בך';
 const howDidTheyRespondText = function (name) {
     var sentenceEnd = (gender == 'Male') ? 'ידרג את זה?' : 'תדרג את זה';
     return 'איך ' + name + ' ' + sentenceEnd;
-}
+};
 const howTheyRatedText = function (name) {
     var sentenceEnd = (gender == 'Male') ? 'דרג את זה.' : 'דרגה את זה.';
     return 'כך ' + name + ' ' + sentenceEnd;
-}
+};
 const thisIsYourResponseText = 'זוהי תשובתך:';
+const answerTheQuestions = function (name) {
+    var sentenceStart = (gender == 'Male') ? 'אנא ענה ' : 'אנא עני '
+    return sentenceStart + 'על השאלות הבאות:';
+};
+const rateLikablility = function (name) {
+    var sentenceEnd = (gender == 'Male') ? ' חביב?' : ' חביבה?';
+    return 'עד כמה ' + name + sentenceEnd;
+};
+const rateTrustworthiness = function (name) {
+    var sentenceEnd = (gender == 'Male') ? ' אמין?' : ' אמינה?';
+    return 'עד כמה ' + name + sentenceEnd;
+};
+const rateCompenetce = function (name) {
+    var sentenceEnd = (gender == 'Male') ? ' כשיר?' : ' כשירה?';
+    return 'עד כמה ' + name + sentenceEnd;
+};
 
 //Fixation slide
 var fixation = {
@@ -22,132 +38,260 @@ var fixation = {
     data: {test_part: 'fixation'}
 };
 
-var firstCond = {
-    timeline:[{type: 'html-slider-response-modified',
-    stimulus: function () {
-        return '<div style="margin: auto;">' +
-        '<img src="stimuli/'+jsPsych.timelineVariable('index', true)+'.jpg" style="width: 500px;" />' +
-        '</div>';},
-    blocks: [
-        {
-            text: '',
-            slider: false,
-            locked: false,
-            duration: FASTMODE? 500: 5000
-        },
-        {
-            text: pleaseRespondText,
-            slider: true,
-            locked: false,
-            key_press: 'space',
-            require_response: true
-        }
-    ],
-        labels: ['-100', '100'],
-        max: 100, min: -100,
-        data: function () { return { valence: (jsPsych.timelineVariable('mean', true) >= 0) ? 'Positive' : 'Negative', mean: jsPsych.timelineVariable('mean', true)} },
-    post_trial_gap: 1000,
-        on_finish: function (data) {
-            firstCondResponses[data.valence].push(data.response[1].slider);
-        }
-    }, fixation],
-    timeline_variables: FASTMODE ? [TRAINING_NEG_IMAGES_OBJS[0], TRAINING_POS_IMAGES_OBJS[0]]:
-                                 TRAINING_POS_IMAGES_OBJS.concat(TRAINING_NEG_IMAGES_OBJS),
-    randomize_order: true
+var firstCond = function (ExpObj) {
+    return {
+        timeline: [fixation, {
+            type: 'html-slider-response-modified',
+            stimulus: function () {
+                return '<div style="margin: auto;">' +
+                    '<img src="stimuli/' + ExpObj['index'] + '.jpg" style="width: 500px;" />' +
+                    '</div>';
+            },
+            blocks: [
+                {
+                    text: '',
+                    slider: false,
+                    locked: false,
+                    duration: PRE_TRIAL_BREAK
+                },
+                {
+                    text: pleaseRespondText,
+                    slider: true,
+                    locked: false,
+                    key_press: 'space',
+                    require_response: true
+                }
+            ],
+            labels: ['-100', '100'],
+            max: 100, min: -100,
+            data: function () {
+                return {
+                    Image: ExpObj.index,
+                    Valence: parseFloat(ExpObj.mean) > 0 ? 'Positive' : 'Negative'
+                }
+            },
+            post_trial_gap: 1000,
+            on_finish: function (data) {
+                firstCondResponses[data.Valence].push(data.response[1].slider);
+            }
+        }]
+    };
 };
     
 
-var selfCond = {
-    timeline:[{type: 'html-slider-response-modified',
-        stimulus: function () {
-            return '<div style="margin: auto;">' +
-                '<img src="stimuli/'+jsPsych.timelineVariable('index', true)+'.jpg" style="width: 500px;" />' +
-                '</div>';},
-        blocks: [
-            {
-                text: '',
-                slider: false,
-                locked: false,
-                duration: FASTMODE ? 500 : 5000
+var selfCond = function (ExpObj) {
+    return {
+        timeline: [fixation,{
+            type: 'html-slider-response-modified',
+            stimulus: function () {
+                return '<div style="margin: auto;">' +
+                    '<img src="stimuli/' + ExpObj.index + '.jpg" style="width: 500px;" />' +
+                    '</div>';
             },
-            {
-                text: pleaseRespondText,
-                slider: true,
-                locked: false,
-                key_press: 'space',
-                require_response: true
-            },
-            {
-                text: '',
-                slider: false,
-                locked: false,
-                duration: 1000
-            },
-            {
-                text: thisIsYourResponseText,
-                slider: true,
-                locked: true,
-                key_press: 'space',
-                slider_color: 'red',
-                start: '$1$'
-            },
-        ],
-        labels: ['-100', '100'],
-        max: 100, min: -100,
-        post_trial_gap: 1000,
-        data: function(){return {
-            Image: jsPsych.timelineVariable('index', true),
-            Valence: parseFloat(jsPsych.timelineVariable('mean', true))>0?'Positive':'Negative'
-        };
-        }
-    }, fixation],
-    timeline_variables: experimentObjects,
-    randomize_order: false
+            blocks: [
+                {
+                    text: '',
+                    slider: false,
+                    locked: false,
+                    duration: PRE_TRIAL_BREAK
+                },
+                {
+                    text: pleaseRespondText,
+                    slider: true,
+                    locked: false,
+                    key_press: 'space',
+                    require_response: true
+                },
+                {
+                    text: '',
+                    slider: false,
+                    locked: false,
+                    duration: 1000
+                },
+                {
+                    text: thisIsYourResponseText,
+                    slider: true,
+                    locked: true,
+                    key_press: 'space',
+                    slider_color: 'red',
+                    start: '$1$'
+                },
+            ],
+            labels: ['-100', '100'],
+            max: 100, min: -100,
+            post_trial_gap: 1000,
+            data: function () {
+                return {
+                    Image: ExpObj.index,
+                    Valence: parseFloat(ExpObj.mean) > 0 ? 'Positive' : 'Negative'
+                };
+            }
+        }]}
 };
 
 
-var otherCond = {
-    timeline:[{type: 'html-slider-response-modified',
+var otherCond = function (ExpObj) {
+    return {
+        timeline: [fixation, {
+            type: 'html-slider-response-modified',
+            stimulus: function () {
+                return '<div style="margin: auto;">' +
+                    '<img src="stimuli/' + ExpObj.index + '.jpg" style="width: 500px;" />' +
+                    '</div>';
+            },
+            blocks: function () {
+                return [
+                    {
+                        text: '',
+                        slider: false,
+                        locked: false,
+                        duration: PRE_TRIAL_BREAK
+                    },
+                    {
+                        text: howDidTheyRespondText(ExpObj.name),
+                        slider: true,
+                        locked: false,
+                        key_press: 'space',
+                        require_response: true
+                    },
+                    {
+                        text: '',
+                        slider: false,
+                        locked: false,
+                        duration: 1000
+                    },
+                    {
+                        text: howTheyRatedText(ExpObj.name),
+                        slider: true,
+                        locked: true,
+                        key_press: 'space',
+                        slider_color: 'red',
+                        start: calculateFeedback(ExpObj.mean, ExpObj.SD)
+                    },
+                ]
+            },
+            labels: ['-100', '100'],
+            max: 100, min: -100,
+            post_trial_gap: 1000,
+            data: function () {
+                return {
+                    Image: ExpObj.index,
+                    Valence: parseFloat(ExpObj.mean) > 0 ? 'Positive' : 'Negative'
+                };
+            }
+        }]
+    };
+};
+
+
+var stage3ShowImage = function (ImageInd, ImageMean, ImageSD, Name, PersonCond) {
+    return {
+        type: 'html-slider-response-modified',
         stimulus: function () {
             return '<div style="margin: auto;">' +
-                '<img src="stimuli/'+jsPsych.timelineVariable('index', true)+'.jpg" style="width: 500px;" />' +
-                '</div>';},
-        blocks: function() {return [
-            {
-                text: '',
-                slider: false,
-                locked: false,
-                duration: FASTMODE? 500:5000
-            },
-            {
-                text: howDidTheyRespondText(jsPsych.timelineVariable('name', true)),
-                slider: true,
-                locked: false,
-                key_press: 'space',
-                require_response: true
-            },
-            {
-                text: '',
-                slider: false,
-                locked: false,
-                duration: 1000
-            },
-            {
-                text: howTheyRatedText,
-                slider: true,
-                locked: true,
-                key_press: 'space',
-                slider_color: 'red',
-                start: calculateFeedback(jsPsych.timelineVariable('mean', true), jsPsych.timelineVariable('SD', true))
-            },
-        ]},
+                '<img src="stimuli/' + ImageInd + '.jpg" style="width: 500px;" />' +
+                '</div>';
+        },
+        blocks: [
+                {
+                    text: '',
+                    slider: false,
+                    locked: false,
+                    duration: PRE_TRIAL_BREAK
+                },
+                {
+                    text: howTheyRatedText(Name),
+                    slider: true,
+                    locked: true,
+                    start: calculateFeedback(ImageMean, ImageSD, PersonCond),
+                    key_press: 'space',
+                    require_response: false,
+                }
+            ],
         labels: ['-100', '100'],
         max: 100, min: -100,
         post_trial_gap: 1000,
-        data: function(){return {
-            Image: jsPsych.timelineVariable('index', true),
-            Valence: parseFloat(jsPsych.timelineVariable('mean', true))>0?'Positive':'Negative'
-        };}},fixation],
-    timeline_variables: experimentObjects,
-    randomize_order: false
+        data: function () {
+            return {
+                trial_type: 'Stage 3 Show Images'
+            };
+        }
+    }
+};
+
+
+var Stage3RateThisPerson = function (Name) {
+    return {
+        type: 'html-slider-response-modified',
+        stimulus: function () {
+            return '<div style="margin: auto;">' +
+                answerTheQuestions(Name) +
+                '</div>';
+        },
+        blocks: [
+                {
+                    text: '',
+                    slider: false,
+                    locked: false,
+                    duration: PRE_TRIAL_BREAK
+                },
+                {
+                    text: rateLikablility(Name),
+                    slider: true,
+                    locked: false,
+                    start: 50,
+                    key_press: 'space',
+                    require_response: false
+                },
+                {
+                    text: '',
+                    slider: false,
+                    locked: false,
+                    duration: PRE_TRIAL_BREAK
+                },
+                {
+                    text: rateTrustworthiness(Name),
+                    slider: true,
+                    locked: false,
+                    start: 50,
+                    key_press: 'space',
+                    require_response: false
+                },
+                {
+                    text: '',
+                    slider: false,
+                    locked: false,
+                    duration: PRE_TRIAL_BREAK
+                },
+                {
+                    text: rateCompenetce(Name),
+                    slider: true,
+                    locked: false,
+                    start: 50,
+                    key_press: 'space',
+                    require_response: false
+                }
+            ],
+        labels: ['כלל לא', 'בהחלט'],
+        max: 100, min: 0,
+        post_trial_gap: 1000,
+        data: function () {
+            return {
+                Person: Name,
+            };
+        }
+    }
+};
+
+
+var stage3SinglePerson = function (Person) {
+    var finalArray = [fixation];
+    for (var i = 0; i < Person.images.length; i++) {
+        var cur = Person.images[i];
+        finalArray.push(stage3ShowImage(cur.index, cur.mean, cur.SD, Person.name, Person.cond));
+    }
+    finalArray.push(Stage3RateThisPerson(Person.name));
+    return {
+        timeline: finalArray
+    }
 };

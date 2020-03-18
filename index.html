@@ -8,26 +8,68 @@
     <script src="Names.js"></script>
 
     <script>
+        //initializing number of trials per stage. Stage 1 should be up to 10, represents the number of trials per valence.
+        //stage2*2 + stage3*2 <= 50. Stage 2 represents number per valence inside self/other type, stage 3 represents num per person.
+        const STAGE_1_TRIALS_NUM = 5;
+        const STAGE_2_TRIALS_NUM = 20;
+        const STAGE_3_TRIALS_NUM = 5;
+
+
+
+        //Fast mode?
         const FASTMODE = true;
-        //Choosing condition randomly
 
-        const stage2Cond = (Math.floor(Math.random() * 2) == 0) ? 'Self' : 'Other';
-        const cond0 = 'Moderate';
-        const cond1 = 'Extreme';
-        const condition = (Math.floor(Math.random() * 2) == 0) ? cond0 : cond1;
-        //TEMP
+
+
+        //Waiting durations
+        const PRE_TRIAL_BREAK = FASTMODE ? 500 : 5000;
+        //Choosing condition randomly, -1 = extreme, 1 = moderate
+        const Condition = (Math.floor(Math.random() * 2) == 0) ? -1 : 1;
+        //TEMP - choosing gender
         var gender = (Math.floor(Math.random() * 2) == 0) ? 'Male' : 'Female';
-        const experimentNames = (gender == 'Male') ? M_names : F_names;
-
-        var experimentObjects = FASTMODE ? [POSITIVE_IMAGES_OBJS[0], NEGATIVE_IMAGES_OBJS[0]] :
-            jsPsych.randomization.repeat(POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS), 1);
-
-        const names = FASTMODE ? experimentNames.slice(0, 2) : experimentNames;
-
-        for (var i = 0; i < experimentObjects.length; i++) {
-            experimentObjects[i].name=names[i];
-            console.log(names[i]);
+        const names = (gender == 'Male') ? jsPsych.randomization.repeat(M_names,1) : jsPsych.randomization.repeat(F_names,1);
+        //Create experiment objects
+        var stage1Objects = FASTMODE ? [TRAINING_NEG_IMAGES_OBJS[0], TRAINING_POS_IMAGES_OBJS[0]] :
+            (TRAINING_POS_IMAGES_OBJS.slice(0, STAGE_1_TRIALS_NUM - 1)).concat(TRAINING_NEG_IMAGES_OBJS.slice(0, STAGE_1_TRIALS_NUM - 1));
+        var stage2Objects = FASTMODE ? {
+            other: [POSITIVE_IMAGES_OBJS[0], NEGATIVE_IMAGES_OBJS[0]],
+            self: [POSITIVE_IMAGES_OBJS[1], NEGATIVE_IMAGES_OBJS[1]]
+            } :
+            {
+                other: POSITIVE_IMAGES_OBJS.slice(0, (STAGE_2_TRIALS_NUM)-1).
+                concat(NEGATIVE_IMAGES_OBJS.slice(0, (STAGE_2_TRIALS_NUM)-1)),
+                self: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM, (STAGE_2_TRIALS_NUM*2)-1).
+                concat(NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM,(STAGE_2_TRIALS_NUM*2)-1))
+            };
+        for (var i = 0; i < stage2Objects.other.length; i++) {
+            stage2Objects.other[i].name=names[i];
         }
+        var stage3Object = [
+            {
+                cond: -1,
+                valence: 'neg',
+                name: names[names.length-4],
+                images: NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM*2, STAGE_2_TRIALS_NUM*2 + STAGE_3_TRIALS_NUM-1)
+            },
+            {
+                cond: 1,
+                valence: 'neg',
+                name: names[names.length-3],
+                images: NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM*2 + STAGE_3_TRIALS_NUM, STAGE_2_TRIALS_NUM*2 + STAGE_3_TRIALS_NUM*2 -1)
+            },
+            {
+                cond: -1,
+                valence: 'pos',
+                name: names[names.length-2],
+                images: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM*2, STAGE_2_TRIALS_NUM*2 + STAGE_3_TRIALS_NUM-1)
+            },
+            {
+                cond: 1,
+                valence: 'pos',
+                name: names[names.length-1],
+                images: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM*2 + STAGE_3_TRIALS_NUM, STAGE_2_TRIALS_NUM*2 + STAGE_3_TRIALS_NUM*2 -1)
+            }
+        ];
 
         //Initializing variables
         var firstCondResponses = { Negative: [], Positive: [] };
@@ -45,21 +87,38 @@
 </head>
 <body dir="rtl">
 <script>
-
-    var stage2 = (stage2Cond == 'Self') ? selfCond : otherCond;
-
-    console.log(stage2Cond + ' '+condition + ' ' + gender);
-
-
+    //Load Images
     var allImages = POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS).concat(TRAINING_NEG_IMAGES_OBJS).concat(TRAINING_POS_IMAGES_OBJS);
     var IMAGES_TO_LOAD = [];
-
+    
     for (var i=0; i<allImages.length; i++) {
         IMAGES_TO_LOAD.push('stimuli/'+allImages[i].index+'.jpg');
     }
 
-    //initializing the exp
-    timeline = [firstCond, calculateFirstCondDiffenece, stage2];
+    //initializing the exp, not using timeline vars due to unknown problem
+    Stage1Timeline = [];
+    for (var i = 0; i < stage1Objects.length; i++) {
+        Stage1Timeline.push(firstCond(stage1Objects[i]))
+    }
+    var Stage1Full = {
+        timeline: Stage1Timeline
+    };
+    Stage2Timeline = [];
+    for (var i = 0; i < stage2Objects.self.length; i++) {
+        Stage2Timeline.push(selfCond(stage2Objects.self[i]), otherCond(stage2Objects.other[i]));
+    }
+    var Stage2Full = {
+        timeline: Stage2Timeline
+    };
+    var stage3Timeline = [];
+    for (var i = 0; i < stage3Object.length; i++) {
+        stage3Timeline.push(stage3SinglePerson(stage3Object[i]));
+    }
+    var Stage3Full = {
+        timeline: stage3Timeline
+    };
+
+    timeline = [Stage1Full, calculateFirstCondDiffenece, Stage2Full, Stage3Full];
     jsPsych.init({
         timeline: timeline,
         preload_images: IMAGES_TO_LOAD
