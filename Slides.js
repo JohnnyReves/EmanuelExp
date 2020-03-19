@@ -272,9 +272,10 @@ var Stage3RateThisPerson = function (Name) {
                     require_response: false
                 }
             ],
-        labels: ['כלל לא', 'בהחלט'],
+        labels: ['בהחלט', 'כלל לא'],
         max: 100, min: 0,
         post_trial_gap: 1000,
+        slider_dir: 'rtl',
         data: function () {
             return {
                 Person: Name,

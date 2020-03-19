@@ -109,7 +109,13 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
                 pretty_name:'Slider width',
                 default: null,
                 description: 'Width of the slider in pixels.'
-            }
+            },
+            slider_dir: {
+                type: jsPsych.plugins.parameterType.HTML_STRING,
+                pretty_name: 'Slider Direction',
+                default: 'ltr',
+                description: 'The direction of the slider'
+            },
         }
     };
 
@@ -162,7 +168,7 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
             html += 'width:'+trial.slider_width+'px;';
         }
         html += '">';
-        html += '<input type="range" value="'+trial.blocks[0].start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" dir="ltr" style="width: 100%;" id="jspsych-html-slider-response-response" class="slider"></input>';
+        html += '<input type="range" value="' + trial.blocks[0].start + '" min="' + trial.min + '" max="' + trial.max + '" step="' + trial.step + '" dir="' + trial.slider_dir + '" style="width: 100%;" id="jspsych-html-slider-response-response" class="slider"></input>';
         html += '<div>'
         for(var j=0; j < trial.labels.length; j++){
             var width = 100/(trial.labels.length-1);
