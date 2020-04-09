@@ -83,6 +83,7 @@
     <script src="jspsych-6.1.0/plugins/jspsych-call-function.js"></script>
     <script src="logic.js"></script>
     <script src="Slides.js"></script>
+    <script src="instruction_slides.js"></script>
     <link rel="stylesheet" href="jspsych-6.1.0/css/jspsych.css" />
 </head>
 <body dir="rtl">
@@ -118,7 +119,8 @@
         timeline: stage3Timeline
     };
 
-    timeline = [Stage1Full, calculateFirstCondDiffenece, Stage2Full, Stage3Full];
+    timeline = [firstSlide, secondSlide, thirdSlide, fourthSlide, fifthSlide, sixthSlide,
+        Stage1Full, calculateFirstCondDiffenece, seventhSlide, Stage2Full, eightSlide, Stage3Full, ninethSlide];
     jsPsych.init({
         timeline: timeline,
         preload_images: IMAGES_TO_LOAD
