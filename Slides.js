@@ -1,29 +1,21 @@
 ﻿//The texts to be presented
-const pleaseRespondText = (gender == 'Male') ? 'אנא דרג את הרגש שהתמונה מעוררת בך' : 'אנא דרגי את הרגש שהתמונה מעוררת בך';
+const pleaseRespondText = 'How did the picture make you feel?';
 const howDidTheyRespondText = function (name) {
-    var sentenceEnd = (gender == 'Male') ? 'ידרג את זה?' : 'תדרג את זה';
-    return 'איך ' + name + ' ' + sentenceEnd;
+    return 'How did the picture make ' + name + ' feel?';
 };
 const howTheyRatedText = function (name) {
-    var sentenceEnd = (gender == 'Male') ? 'דרג את זה.' : 'דרגה את זה.';
-    return 'כך ' + name + ' ' + sentenceEnd;
+    return name + ' felt:';
 };
-const thisIsYourResponseText = 'זוהי תשובתך:';
-const answerTheQuestions = function (name) {
-    var sentenceStart = (gender == 'Male') ? 'אנא ענה ' : 'אנא עני '
-    return sentenceStart + 'על השאלות הבאות:';
-};
+const thisIsYourResponseText = 'YOU felt:';
+const answerTheQuestions = 'Please answer the following questions:';
 const rateLikablility = function (name) {
-    var sentenceEnd = (gender == 'Male') ? ' חביב?' : ' חביבה?';
-    return 'עד כמה ' + name + sentenceEnd;
+    return 'How likable is ' + name + '?';
 };
 const rateTrustworthiness = function (name) {
-    var sentenceEnd = (gender == 'Male') ? ' אמין?' : ' אמינה?';
-    return 'עד כמה ' + name + sentenceEnd;
+    return 'How trustworthy is ' + name + '?';
 };
 const rateCompenetce = function (name) {
-    var sentenceEnd = (gender == 'Male') ? ' כשיר?' : ' כשירה?';
-    return 'עד כמה ' + name + sentenceEnd;
+    return 'How competent is ' + name + '?';
 };
 
 //Fixation slide
@@ -117,7 +109,7 @@ var selfCond = function (ExpObj) {
                     start: '$1$'
                 },
             ],
-            labels: ['-100', '100'],
+            labels: ['-100<br>Very negative', '100<br>Very positive'],
             max: 100, min: -100,
             post_trial_gap: 1000,
             data: function () {
@@ -170,7 +162,7 @@ var otherCond = function (ExpObj) {
                     },
                 ]
             },
-            labels: ['-100', '100'],
+            labels: ['-100<br>Very negative', '100<br>Very positive'],
             max: 100, min: -100,
             post_trial_gap: 1000,
             data: function () {
@@ -208,7 +200,7 @@ var stage3ShowImage = function (ImageInd, ImageMean, ImageSD, Name, PersonCond) 
                     require_response: false,
                 }
             ],
-        labels: ['-100', '100'],
+        labels: ['-100<br>Very negative', '100<br>Very positive'],
         max: 100, min: -100,
         post_trial_gap: 1000,
         data: function () {
@@ -272,10 +264,10 @@ var Stage3RateThisPerson = function (Name) {
                     require_response: false
                 }
             ],
-        labels: ['בהחלט', 'כלל לא'],
+        labels: ['not at all', 'Extremely'],
         max: 100, min: 0,
         post_trial_gap: 1000,
-        slider_dir: 'rtl',
+        slider_dir: 'ltr',
         data: function () {
             return {
                 Person: Name,

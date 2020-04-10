@@ -177,10 +177,10 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
             html += '<span style="text-align: center; font-size: 80%;" dir="ltr">'+trial.labels[j]+'</span>';
             html += '</div>'
         };
-        html += '<div style="font-size: 20px%; height:20px; position: relative;">ערך נוכחי:<br><span  id="slider-value" dir="ltr"></span></div>';
+        html += '<div style="font-size: 20px%; height:20px; position: relative;">Selected value<br><span  id="slider-value" dir="ltr"></span></div>';
         html += '</div>';
         html += '</div>';
-        html += '<div id="additional-messages" style="visibility: hidden;"><div style="position: relative; top:0%; height:25px;" id="press-space">יש להקיש על מקש הרווח כדי להמשיך</div>';
+        html += '<div id="additional-messages" style="visibility: hidden;"><div style="position: relative; top:0%; height:25px;" id="press-space">Press the spacebar to continue</div>';
         html += '<div style="position: relative; top:0%; height:25px;" id="error-msg"></div></div>';
         html += '</div>';
         html += '</div>';
@@ -217,7 +217,7 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
                 responded = !trial.blocks[i].require_response;
                 function check_if_responded(i) {
                     if (responded) {nextBlock(i); return;}
-                    display_element.querySelector('#error-msg').innerHTML = 'יש להזיז את הסמן על מנת להמשיך';
+                    display_element.querySelector('#error-msg').innerHTML = 'You must move the slider to continue';
                     display_element.querySelector('#error-msg').style.color = 'red';
                     setTimeout(function () {
                         display_element.querySelector('#error-msg').style.color = 'black'
