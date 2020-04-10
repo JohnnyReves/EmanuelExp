@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\jspsych-6.1.0",
+    "\\jspsych-6.1.0\\css",
+    "\\jspsych-6.1.0\\plugins"
   ],
-  "SelectedNode": "\\instruction_slides.js",
+  "SelectedNode": "\\Slides.js",
   "PreviewInSolutionExplorer": false
 }

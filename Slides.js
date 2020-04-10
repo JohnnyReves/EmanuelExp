@@ -217,7 +217,7 @@ var Stage3RateThisPerson = function (Name) {
         type: 'html-slider-response-modified',
         stimulus: function () {
             return '<div style="margin: auto;">' +
-                answerTheQuestions(Name) +
+                answerTheQuestions +
                 '</div>';
         },
         blocks: [
