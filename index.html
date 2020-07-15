@@ -119,8 +119,15 @@
         timeline: stage3Timeline
     };
 
-    timeline = [firstSlide, secondSlide, thirdSlide, fourthSlide, fifthSlide, sixthSlide,
-        Stage1Full, calculateFirstCondDiffenece, seventhSlide, Stage2Full, eightSlide, Stage3Full, ninethSlide];
+    examples = [
+            { index: "exm1", N: "57", min: "-21.00", max: "100.00", mean: "0", SD: "0" },
+            { index: "exm2", N: "57", min: "-100.00", max: "84.00", mean: "0", SD: "0", name: "Roy Boy" }
+    ]
+
+    timeline = [firstSlide, secondSlide, thirdSlide, thirdSlide1, thirdSlide2, fourthSlide, fifthSlide, fifthSlide1, sixthSlide, Stage1Full, 
+    calculateFirstCondDiffenece, seventhSlide, seventhSlide1, selfCond(examples[0]),
+        otherCond(examples[1]),  seventhSlide2,
+     Stage2Full, eightSlide, Stage3Full, ninethSlide];
     jsPsych.init({
         timeline: timeline,
         preload_images: IMAGES_TO_LOAD

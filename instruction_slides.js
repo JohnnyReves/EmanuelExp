@@ -17,32 +17,49 @@ var secondSlide = {
 var thirdSlide = {
     type: 'html-keyboard-response',
     stimulus: '<div dir="ltr">During the task, you will rate your emotional responses to different images. You will rate your responses on a continuous scale that ranges from -100 to 100. ' +
-        'The scale will appear below each picture, as follows:<br><img src="stimuli/scalepic.png" style="width:500px;"><br>' +
+        'The scale will appear below each picture, as follows:<br>'+
+        '<img src="instruction_images/scalepic.PNG" style="width:500px;">'+
+            '<br>' +
         '<p>A rating of <strong>100</strong> means that the image makes you <strong>feel very good</strong></p>. </p>A rating of <strong>-100</strong> means that the image makes you <strong>feel very bad</strong></p>. <p>A rating of <strong>0</strong> means that the picture <strong>does not make you feel good or bad.</strong></p> ' +
         'To indicate your rating, use the mouse to move the cursor to the relevant position on the scale, which best reflects your emotional response to the image. After you rate how you feel, we will show you your rating on a separate subsequent screen.<br>' +
         '<p>Press the spacebar to continue.</p></div>',
     choices: ['space']
 }
 
+var thirdSlide1 = {
+    type: 'html-keyboard-response',
+    stimulus: '<div dir="ltr">Sometimes, we will ask you to rate your own reaction to the image. In these cases, you will see a picture, and the rating scale will appear below it. You will then move the mouse and click to indicate how you feel in response to the image. It will look like this: <br><img style="width:500px;" src="instruction_images/slidepic1.png"><br><p>Press the spacebar to continue</p></div>',
+    choices: ['space']
+}
+
+var thirdSlide2 = {
+    type: 'html-keyboard-response',
+    stimulus: '<div dir="ltr">After you indicate your response, the next slide will show you how you have responded in red. You will not need to respond again, just press the spacebar to continue. It will look like this: <br><img style="width:500px;" src="instruction_images/slidepic2.png"><br><p>Press the space bar to continue</p></div>',
+    choices: ['space']
+}
+
 var fourthSlide = {
     type: 'html-keyboard-response',
-    stimulus: '<div dir="ltr"><p>We will ask you to rate your own emotional reactions to some pictures.</p> In addition, we will ask you to guess the emotional responses of previous participants to some pictures. <p>Each time, you will see the name of a previous participant,' +
-        ' and need to guess the emotional response of that participant to the image, by guessing their rating on the scale.</p><br>' +
+    stimulus: '<div dir="ltr">We will ask you to rate your own reactions to some images. We will also ask you to guess the emotional responses of previous participants to some images. In these cases, you will see the name of an actual previous participant, and need to guess the emotional response of that participant to the image, by guessing their rating on the scale. It will look like this:<br> <img style="width:500px;" src="instruction_images/slidepic3.png"><br><p>Press the spacebar to continue</p></div>',
+    choices: ['space']
+}
+
+
+
+var fifthSlide1 = {
+    type: 'html-keyboard-response',
+    stimulus: '<div dir="ltr">After you guess how the previous participant responded to the image, in the next screen we will show you the actual response of that previous participant to the image in red. It will look like this: <br><img style="width:500px;" src="instruction_images/slidepic4.png"><br>Press the spacebar to continue</div>',
+    choices: ['space']
+}
+
+
+var fifthSlide = {
+    type: 'html-keyboard-response',
+    stimulus: '<div dir="ltr">To indicate the emotional response of a previous participant to a picture, you will also use the same scale that ranges from -100 to 100. A rating of 100 means you assume that the image made the participant feel very good.A rating of - 100 means you assume that the image made the participant feel very bad.A rating of 0 means you assume that the image did not make the participant feel good or bad.Please use the mouse to move the cursor to the place on the scale that best matches the response of the previous participant.' +
         '<p>Press the spacebar to continue.</p></div>',
     choices: ['space']
 }
 
-var fifthSlide = {
-    type: 'html-keyboard-response',
-    stimulus: '<div dir="ltr">To indicate the emotional response of a previous participant to a picture, you will also use the scale that ranges from -100 to 100.<br>' +
-        '<p>A rating of <strong>100</strong> means you assume that the image <strong>made the participant feel very good</strong></p>. <p>A rating of <strong>-100</strong> means you assume that the image <strong>made the participant feel very bad.</strong></p> ' +
-        '<p>A rating of <strong>0 </strong>means you assume that the image <strong>did not make the participant feel good or bad. </strong></p>' +
-        'Pleae use the mouse to move the cursor to the place on the scale that best matches the response of the previous participant. ' +
-        '<p>After you guess how the previous participant responded to the picture, we will show you the <b><u>actual</u></b> rating that previous participant gave to the picture when participating </p>' +
-        'in the study on a separate subsequent screen.<br>' +
-        '<p>Press the spacebar to continue.</p></div>',
-    choices: ['space']
-}
 var sixthSlide = {
     type: 'html-keyboard-response',
     stimulus: '<div dir="ltr">Now, you will complete a brief training phase. <p>You will be presented with different pictures and rate how you feel in response to each picture.</p>' +
@@ -59,6 +76,21 @@ var seventhSlide = {
         '<p>Press the spacebar to begin the task.</p></div>',
     choices: ['space']
 }
+
+
+
+var seventhSlide1 = {
+    type: 'html-keyboard-response',
+    stimulus: '<div dir="ltr">Here’s a brief example of a few trials.<p>Press the spacebar to begin the task.</p></div>',
+    choices: ['space']
+}
+
+var seventhSlide2 = {
+    type: 'html-keyboard-response',
+    stimulus: '<div dir="ltr">When you are ready to begin the main task. Press the spacebar.</div>',
+    choices: ['space']
+}
+
 
 var eightSlide = {
     type: 'html-keyboard-response',
