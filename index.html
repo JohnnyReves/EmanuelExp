@@ -91,7 +91,7 @@
     //Load Images
     var allImages = POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS).concat(TRAINING_NEG_IMAGES_OBJS).concat(TRAINING_POS_IMAGES_OBJS);
     var IMAGES_TO_LOAD = [];
-    
+
     for (var i=0; i<allImages.length; i++) {
         IMAGES_TO_LOAD.push('stimuli/'+allImages[i].index+'.jpg');
     }
@@ -118,7 +118,6 @@
     var Stage3Full = {
         timeline: stage3Timeline
     };
-
     examples = [
             { index: "exm1", N: "57", min: "-21.00", max: "100.00", mean: "0", SD: "0" },
             { index: "exm2", N: "57", min: "-100.00", max: "84.00", mean: "0", SD: "0", name: "Roy Boy" }
