@@ -91,7 +91,7 @@
     //Load Images
     var allImages = POSITIVE_IMAGES_OBJS.concat(NEGATIVE_IMAGES_OBJS).concat(TRAINING_NEG_IMAGES_OBJS).concat(TRAINING_POS_IMAGES_OBJS);
     var IMAGES_TO_LOAD = [];
-    
+
     for (var i=0; i<allImages.length; i++) {
         IMAGES_TO_LOAD.push('stimuli/'+allImages[i].index+'.jpg');
     }
@@ -119,8 +119,8 @@
         timeline: stage3Timeline
     };
 
-    timeline = [firstSlide, secondSlide, thirdSlide, fourthSlide, fifthSlide, sixthSlide,
-        Stage1Full, calculateFirstCondDiffenece, seventhSlide, Stage2Full, eightSlide, Stage3Full, ninethSlide];
+    timeline = [firstSlide, secondSlide, thirdSlide, thirdSlide1,thirdSlide2,fourthSlide, fifthSlide,fifthSlide1, sixthSlide,
+        Stage1Full, calculateFirstCondDiffenece, seventhSlide, seventhSlide1,Stage2Full, eightSlide, Stage3Full, ninethSlide];
     jsPsych.init({
         timeline: timeline,
         preload_images: IMAGES_TO_LOAD
