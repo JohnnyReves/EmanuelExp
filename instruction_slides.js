@@ -10,7 +10,7 @@ var firstSlide = {
 
 var secondSlide = {
     type: 'html-keyboard-response',
-    stimulus: '<div dir="ltr"><p>In the upcoming task, we will show you a variety of emotional images</p>. In some cases, we will ask you to <strong> rate your emotional response</strong> to the picture, as previous participants have done before you. ,p>In other cases, we will ask you to <strong>guess the emotional response of a previous participant to the picture.</strong></p><br><p>Press the spacebar to continue.</p></div>',
+    stimulus: '<div dir="ltr"><p>In the upcoming task, we will show you a variety of emotional images.</p> In some cases, we will ask you to <strong> rate your emotional response</strong> to the picture, as previous participants have done before you. In other cases, we will ask you to <strong>guess the emotional response of a previous participant to the picture.</strong></p><br><p>Press the spacebar to continue.</p></div>',
     choices: ['space']
 }
 
@@ -40,7 +40,7 @@ var thirdSlide2 = {
 
 var fourthSlide = {
     type: 'html-keyboard-response',
-    stimulus: '<div dir="ltr">We will ask you to rate your own reactions to some images. We will also ask you to guess the emotional responses of previous participants to some images. In these cases, you will see the name of an actual previous participant, and need to guess the emotional response of that participant to the image, by guessing their rating on the scale. It will look like this:<br> <img style="width:500px;" src="instruction_images/slidepic3.png"><br><p>Press the spacebar to continue</p></div>',
+    stimulus: '<div dir="ltr">In addition to asking you to rate your own reactions to some images, we will also ask you to guess the emotional responses of previous participants to some images. In these cases, you will see the name of an actual previous participant, and need to guess the emotional response of that participant to the image, by guessing their rating on the scale. It will look like this:<br> <img style="width:500px;" src="instruction_images/slidepic3.png"><br><p>Press the spacebar to continue</p></div>',
     choices: ['space']
 }
 
@@ -55,7 +55,7 @@ var fifthSlide1 = {
 
 var fifthSlide = {
     type: 'html-keyboard-response',
-    stimulus: '<div dir="ltr">To indicate the emotional response of a previous participant to a picture, you will also use the same scale that ranges from -100 to 100. A rating of 100 means you assume that the image made the participant feel very good.A rating of - 100 means you assume that the image made the participant feel very bad.A rating of 0 means you assume that the image did not make the participant feel good or bad.Please use the mouse to move the cursor to the place on the scale that best matches the response of the previous participant.' +
+    stimulus: '<div dir="ltr">To indicate the emotional response of a previous participant to a picture, you will also use the same scale that ranges from -100 to 100. A rating of 100 means you assume that the image made the participant feel very good. A rating of - 100 means you assume that the image made the participant feel very bad.A rating of 0 means you assume that the image did not make the participant feel good or bad. Please use the mouse to move the cursor to the place on the scale that best matches the response of the previous participant.' +
         '<p>Press the spacebar to continue.</p></div>',
     choices: ['space']
 }
