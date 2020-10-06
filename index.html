@@ -28,42 +28,34 @@
         const Condition = (Math.floor(Math.random() * 2) == 0) ? -1 : 1;
         //TEMP - choosing gender
         var gender = (Math.floor(Math.random() * 2) == 0) ? 'Male' : 'Female';
-        const names = (gender == 'Male') ? jsPsych.randomization.repeat(M_names, 1) : jsPsych.randomization.repeat(F_names, 1);
         //Create experiment objects
         var stage1Objects = FASTMODE ? [TRAINING_NEG_IMAGES_OBJS[0], TRAINING_POS_IMAGES_OBJS[0]] :
-            (TRAINING_POS_IMAGES_OBJS.slice(0, STAGE_1_TRIALS_NUM - 1)).concat(TRAINING_NEG_IMAGES_OBJS.slice(0, STAGE_1_TRIALS_NUM - 1));
+            (TRAINING_POS_IMAGES_OBJS.slice(0, STAGE_1_TRIALS_NUM)).concat(TRAINING_NEG_IMAGES_OBJS.slice(0, STAGE_1_TRIALS_NUM));
         var stage2Objects = FASTMODE ? {
             other: [POSITIVE_IMAGES_OBJS[0], NEGATIVE_IMAGES_OBJS[0]],
             self: [POSITIVE_IMAGES_OBJS[1], NEGATIVE_IMAGES_OBJS[1]]
         } : {
-            other: POSITIVE_IMAGES_OBJS.slice(0, (STAGE_2_TRIALS_NUM) - 1).
-            concat(NEGATIVE_IMAGES_OBJS.slice(0, (STAGE_2_TRIALS_NUM) - 1)),
-            self: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM, (STAGE_2_TRIALS_NUM * 2) - 1).
-            concat(NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM, (STAGE_2_TRIALS_NUM * 2) - 1))
+            other: POSITIVE_IMAGES_OBJS.slice(0, (STAGE_2_TRIALS_NUM)).
+            concat(NEGATIVE_IMAGES_OBJS.slice(0, (STAGE_2_TRIALS_NUM))),
+            self: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM, (STAGE_2_TRIALS_NUM * 2)).
+            concat(NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM, (STAGE_2_TRIALS_NUM * 2)))
         };
-        for (var i = 0; i < stage2Objects.other.length; i++) {
-            stage2Objects.other[i].name = names[i];
-        }
         var stage3Object = [{
             cond: -1,
             valence: 'neg',
-            name: names[names.length - 4],
-            images: NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM * 2, STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM - 1)
+            images: NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM * 2, STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM)
         }, {
             cond: 1,
             valence: 'neg',
-            name: names[names.length - 3],
-            images: NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM, STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM * 2 - 1)
+            images: NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM, STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM * 2)
         }, {
             cond: -1,
             valence: 'pos',
-            name: names[names.length - 2],
-            images: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM * 2, STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM - 1)
+            images: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM * 2, STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM)
         }, {
             cond: 1,
             valence: 'pos',
-            name: names[names.length - 1],
-            images: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM, STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM * 2 - 1)
+            images: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM, STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM * 2)
         }];
 
         //Initializing variables
@@ -149,5 +141,6 @@
     </script>
 
 </body>
+
 
 </html>

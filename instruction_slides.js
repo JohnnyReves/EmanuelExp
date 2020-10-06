@@ -17,9 +17,9 @@ var secondSlide = {
 var thirdSlide = {
     type: 'html-keyboard-response',
     stimulus: '<div dir="ltr">During the task, you will rate your emotional responses to different images. You will rate your responses on a continuous scale that ranges from -100 to 100. ' +
-        'The scale will appear below each picture, as follows:<br>'+
-        '<img src="instruction_images/scalepic.PNG" style="width:500px;">'+
-            '<br>' +
+        'The scale will appear below each picture, as follows:<br>' +
+        '<img src="instruction_images/scalepic.PNG" style="width:500px;">' +
+        '<br>' +
         '<p>A rating of <strong>100</strong> means that the image makes you <strong>feel very good</strong></p>. </p>A rating of <strong>-100</strong> means that the image makes you <strong>feel very bad</strong></p>. <p>A rating of <strong>0</strong> means that the picture <strong>does not make you feel good or bad.</strong></p> ' +
         'To indicate your rating, use the mouse to move the cursor to the relevant position on the scale, which best reflects your emotional response to the image. After you rate how you feel, we will show you your rating on a separate subsequent screen.<br>' +
         '<p>Press the spacebar to continue.</p></div>',
@@ -104,6 +104,7 @@ var eightSlide = {
 
 var ninethSlide = {
     type: 'html-keyboard-response',
-    stimulus: '<div dir="ltr">The task is over. Please press the spacebar to continue.</div>',
-    choices: ['space']
+    stimulus: '<div dir="ltr">The task is over. <br>' +
+        'Please enter the following link to move on to a final questionnaire <br><a href="">Press here</a></div>',
+    choices: jsPsych.NO_KEYS
 }

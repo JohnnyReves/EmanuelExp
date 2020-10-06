@@ -17,7 +17,7 @@ const rateTrustworthiness = function(name) {
 const rateCompenetce = function(name) {
     return 'How competent is ' + name + '?';
 };
-const genderQuestionText = 'Wat is your gender?';
+const genderQuestionText = 'What is your gender?';
 
 //Fixation slide
 var fixation = {
@@ -33,7 +33,18 @@ var fixation = {
 
 var genderQuestion = {
     type: 'survey-multi-choice',
-    questions: [{ prompt: genderQuestionText, options: ['Woman', 'Man', 'Other/Prefer not to say'] }]
+    questions: [{ prompt: genderQuestionText, options: ['Woman', 'Man', 'Other/Prefer not to say'] }],
+    on_finish: function(data) {
+        console.log(data)
+        const names = (JSON.parse(data.responses).Q0 == 'Man') ? jsPsych.randomization.repeat(M_names, 1) : jsPsych.randomization.repeat(F_names, 1);
+        for (var i = 0; i < stage2Objects.other.length; i++) {
+            stage2Objects.other[i].name = names[i];
+        }
+        for (var i = stage2Objects.other.length; i < stage2Objects.other.length + stage3Object.length; i++) {
+            stage3Object[i - stage2Objects.other.length].name = names[i];
+            console.log(1)
+        }
+    }
 }
 
 var firstCond = function(ExpObj) {
@@ -183,7 +194,7 @@ var otherCond = function(ExpObj) {
 };
 
 
-var stage3ShowImage = function(ImageInd, ImageMean, ImageSD, Name, PersonCond) {
+var stage3ShowImage = function(ImageInd, ImageMean, ImageSD, Person) {
     return {
         type: 'html-slider-response-modified',
         stimulus: function() {
@@ -199,10 +210,10 @@ var stage3ShowImage = function(ImageInd, ImageMean, ImageSD, Name, PersonCond) {
                     duration: PRE_TRIAL_BREAK
                 },
                 {
-                    text: howTheyRatedText(Name),
+                    text: howTheyRatedText(Person.name),
                     slider: true,
                     locked: true,
-                    start: calculateFeedback(ImageMean, ImageSD, PersonCond),
+                    start: calculateFeedback(ImageMean, ImageSD, Person.cond),
                     key_press: 'space',
                     require_response: false,
                 }
@@ -221,7 +232,7 @@ var stage3ShowImage = function(ImageInd, ImageMean, ImageSD, Name, PersonCond) {
 };
 
 
-var Stage3RateThisPerson = function(Name) {
+var Stage3RateThisPerson = function(Person) {
     return {
         type: 'html-slider-response-modified',
         stimulus: function() {
@@ -229,49 +240,51 @@ var Stage3RateThisPerson = function(Name) {
                 answerTheQuestions +
                 '</div>';
         },
-        blocks: [{
-                text: '',
-                slider: false,
-                locked: false,
-                duration: PRE_TRIAL_BREAK
-            },
-            {
-                text: rateLikablility(Name),
-                slider: true,
-                locked: false,
-                start: 50,
-                key_press: 'space',
-                require_response: false
-            },
-            {
-                text: '',
-                slider: false,
-                locked: false,
-                duration: PRE_TRIAL_BREAK
-            },
-            {
-                text: rateTrustworthiness(Name),
-                slider: true,
-                locked: false,
-                start: 50,
-                key_press: 'space',
-                require_response: false
-            },
-            {
-                text: '',
-                slider: false,
-                locked: false,
-                duration: PRE_TRIAL_BREAK
-            },
-            {
-                text: rateCompenetce(Name),
-                slider: true,
-                locked: false,
-                start: 50,
-                key_press: 'space',
-                require_response: false
-            }
-        ],
+        blocks: function() {
+            return [{
+                    text: '',
+                    slider: false,
+                    locked: false,
+                    duration: PRE_TRIAL_BREAK
+                },
+                {
+                    text: rateLikablility(Person.name),
+                    slider: true,
+                    locked: false,
+                    start: 50,
+                    key_press: 'space',
+                    require_response: false
+                },
+                {
+                    text: '',
+                    slider: false,
+                    locked: false,
+                    duration: PRE_TRIAL_BREAK
+                },
+                {
+                    text: rateTrustworthiness(Person.name),
+                    slider: true,
+                    locked: false,
+                    start: 50,
+                    key_press: 'space',
+                    require_response: false
+                },
+                {
+                    text: '',
+                    slider: false,
+                    locked: false,
+                    duration: PRE_TRIAL_BREAK
+                },
+                {
+                    text: rateCompenetce(Person.name),
+                    slider: true,
+                    locked: false,
+                    start: 50,
+                    key_press: 'space',
+                    require_response: false
+                }
+            ]
+        },
         labels: ['not at all', 'Extremely'],
         max: 100,
         min: 0,
@@ -279,20 +292,22 @@ var Stage3RateThisPerson = function(Name) {
         slider_dir: 'ltr',
         data: function() {
             return {
-                Person: Name,
+                Person: Person.name,
             };
         }
     }
 };
 
 
+
 var stage3SinglePerson = function(Person) {
+    console.log(Person)
     var finalArray = [fixation];
     for (var i = 0; i < Person.images.length; i++) {
         var cur = Person.images[i];
-        finalArray.push(stage3ShowImage(cur.index, cur.mean, cur.SD, Person.name, Person.cond));
+        finalArray.push(stage3ShowImage(cur.index, cur.mean, cur.SD, Person));
     }
-    finalArray.push(Stage3RateThisPerson(Person.name));
+    finalArray.push(Stage3RateThisPerson(Person));
     return {
         timeline: finalArray
     }
