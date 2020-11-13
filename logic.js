@@ -15,17 +15,29 @@ var calculateFirstCondDiffenece = {
     }
 }
 
-var calculateFeedback = function(mean, SD, cond = 0) {
+var calculateFeedback = function(mean, SD, cond = Condition) {
     mean = parseFloat(mean);
     SD = parseFloat(SD);
     var feedback;
     var difference = mean >= 0 ? firstCondDiffenece.Positive : firstCondDiffenece.Negative;
-    if (cond == 0 && mean < 0) { cond = Condition }
+    //if (cond == 0 && mean < 0) { cond = Condition }
     feedback = Math.round(mean + (cond * 0.75 * SD) + difference);
     if (feedback > 100) {
         feedback = 100;
     } else if (feedback < -100) {
         feedback = -100;
     }
+    console.log(feedback + ',' + difference)
+    console.log(firstCondDiffenece)
     return feedback;
+}
+
+var elementInFS = function() {
+    let el = document.fullscreenElement || /* Standard syntax */
+        document.webkitFullscreenElement || /* Chrome, Safari and Opera syntax */
+        document.mozFullScreenElement || /* Firefox syntax */
+        document.msFullscreenElement /* IE/Edge syntax */
+
+    return el != null ? el.tagName : null
+
 }

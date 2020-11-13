@@ -1,5 +1,5 @@
 ﻿//The texts to be presented
-const pleaseRespondText = 'How did the picture make you feel?';
+const pleaseRespondText = 'How did the picture make YOU feel?';
 const howDidTheyRespondText = function(name) {
     return 'How did the picture make ' + name + ' feel?';
 };
@@ -7,7 +7,7 @@ const howTheyRatedText = function(name) {
     return name + ' felt:';
 };
 const thisIsYourResponseText = 'YOU felt:';
-const answerTheQuestions = 'Please answer the following questions:';
+const answerTheQuestions = '<span style="font-size: 1.3vw">Please answer the following questions:</span>';
 const rateLikablility = function(name) {
     return 'How likable is ' + name + '?';
 };
@@ -28,23 +28,27 @@ var fixation = {
     choices: jsPsych.NO_KEYS,
     trial_duration: 750,
     post_trial_gap: 500,
-    data: { test_part: 'fixation' }
+    data: function(data) {
+        return { fullscreen_element: elementInFS(), test_part: 'fixation' }
+    }
 };
 
 var genderQuestion = {
     type: 'survey-multi-choice',
-    questions: [{ prompt: genderQuestionText, options: ['Woman', 'Man', 'Other/Prefer not to say'] }],
+    questions: [{ prompt: genderQuestionText, options: ['Woman', 'Man', 'Other/Prefer not to say'], required: true }],
     on_finish: function(data) {
-        console.log(data)
+        data.Answer = JSON.parse(data.responses).Q0
         const names = (JSON.parse(data.responses).Q0 == 'Man') ? jsPsych.randomization.repeat(M_names, 1) : jsPsych.randomization.repeat(F_names, 1);
         for (var i = 0; i < stage2Objects.other.length; i++) {
             stage2Objects.other[i].name = names[i];
         }
         for (var i = stage2Objects.other.length; i < stage2Objects.other.length + stage3Object.length; i++) {
             stage3Object[i - stage2Objects.other.length].name = names[i];
-            console.log(1)
         }
-    }
+    },
+    data: function(daya) {
+        return { fullscreen_element: elementInFS(), test_part: 'Gender question' }
+    },
 }
 
 var firstCond = function(ExpObj) {
@@ -68,7 +72,7 @@ var firstCond = function(ExpObj) {
                     locked: false,
                     key_press: 'space',
                     require_response: true
-                }
+                },
             ],
             labels: ['-100', '100'],
             max: 100,
@@ -76,14 +80,19 @@ var firstCond = function(ExpObj) {
             data: function() {
                 return {
                     Image: ExpObj.index,
-                    Valence: parseFloat(ExpObj.mean) > 0 ? 'Positive' : 'Negative'
+                    Valence: parseFloat(ExpObj.mean) > 0 ? 'Positive' : 'Negative',
+                    fullscreen_element: elementInFS(),
+                    test_part: 'First cond trial'
                 }
             },
             post_trial_gap: 1000,
             on_finish: function(data) {
-                firstCondResponses[data.Valence].push(data.response[1].slider);
-            }
-        }]
+                console.log(data)
+                firstCondResponses[data.Valence].push(JSON.parse(data.response)[1].slider);
+                data.Answer = JSON.parse(data.response)[1].slider
+                data.rt = JSON.parse(data.response)[1].rt
+            },
+        }],
     };
 };
 
@@ -129,10 +138,17 @@ var selfCond = function(ExpObj) {
             max: 100,
             min: -100,
             post_trial_gap: 1000,
+            on_finish: function(data) {
+                console.log(data)
+                data.Answer = JSON.parse(data.response)[1].slider
+                data.rt = JSON.parse(data.response)[1].rt
+            },
             data: function() {
                 return {
                     Image: ExpObj.index,
-                    Valence: parseFloat(ExpObj.mean) > 0 ? 'Positive' : 'Negative'
+                    Valence: parseFloat(ExpObj.mean) > 0 ? 'Positive' : 'Negative',
+                    fullscreen_element: elementInFS(),
+                    test_part: 'Self cond trial'
                 };
             }
         }]
@@ -186,8 +202,15 @@ var otherCond = function(ExpObj) {
             data: function() {
                 return {
                     Image: ExpObj.index,
-                    Valence: parseFloat(ExpObj.mean) > 0 ? 'Positive' : 'Negative'
+                    Valence: parseFloat(ExpObj.mean) > 0 ? 'Positive' : 'Negative',
+                    fullscreen_element: elementInFS(),
+                    test_part: 'other cond trial'
                 };
+            },
+            on_finish: function(data) {
+                data.Answer = JSON.parse(data.response)[1].slider
+                data.feedback = JSON.parse(data.response)[3].slider
+                data.rt = JSON.parse(data.response)[1].rt
             }
         }]
     };
@@ -204,20 +227,13 @@ var stage3ShowImage = function(ImageInd, ImageMean, ImageSD, Person) {
         },
         blocks: function() {
             return [{
-                    text: '',
-                    slider: false,
-                    locked: false,
-                    duration: PRE_TRIAL_BREAK
-                },
-                {
-                    text: howTheyRatedText(Person.name),
-                    slider: true,
-                    locked: true,
-                    start: calculateFeedback(ImageMean, ImageSD, Person.cond),
-                    key_press: 'space',
-                    require_response: false,
-                }
-            ]
+                text: howTheyRatedText(Person.name),
+                duration: 4000,
+                slider: true,
+                locked: true,
+                start: calculateFeedback(ImageMean, ImageSD, Person.cond),
+                require_response: false,
+            }]
         },
         labels: ['-100<br>Very negative', '100<br>Very positive'],
         max: 100,
@@ -225,8 +241,14 @@ var stage3ShowImage = function(ImageInd, ImageMean, ImageSD, Person) {
         post_trial_gap: 1000,
         data: function() {
             return {
-                trial_type: 'Stage 3 Show Images'
+                Image: ImageInd,
+                Person: Person.name,
+                test_part: 'Stage 3 Show Images',
+                fullscreen_element: elementInFS(),
             };
+        },
+        on_finish: function(data) {
+            console.log(data)
         }
     }
 };
@@ -236,7 +258,7 @@ var Stage3RateThisPerson = function(Person) {
     return {
         type: 'html-slider-response-modified',
         stimulus: function() {
-            return '<div style="margin: auto;">' +
+            return '<div style="margin: 120px auto auto auto;">' +
                 answerTheQuestions +
                 '</div>';
         },
@@ -253,7 +275,8 @@ var Stage3RateThisPerson = function(Person) {
                     locked: false,
                     start: 50,
                     key_press: 'space',
-                    require_response: false
+                    require_response: true,
+                    thumb: false
                 },
                 {
                     text: '',
@@ -267,7 +290,8 @@ var Stage3RateThisPerson = function(Person) {
                     locked: false,
                     start: 50,
                     key_press: 'space',
-                    require_response: false
+                    require_response: true,
+                    thumb: false
                 },
                 {
                     text: '',
@@ -281,7 +305,8 @@ var Stage3RateThisPerson = function(Person) {
                     locked: false,
                     start: 50,
                     key_press: 'space',
-                    require_response: false
+                    require_response: true,
+                    thumb: false
                 }
             ]
         },
@@ -291,9 +316,17 @@ var Stage3RateThisPerson = function(Person) {
         post_trial_gap: 1000,
         slider_dir: 'ltr',
         data: function() {
+            console.log()
             return {
                 Person: Person.name,
+                fullscreen_element: elementInFS(),
+                test_part: 'Rating Person'
             };
+        },
+        on_finish: function(data) {
+            data.likeable = JSON.parse(data.response)[0].slider
+            data.trustworthy = JSON.parse(data.response)[1].slider
+            data.competence = JSON.parse(data.response)[2].slider
         }
     }
 };

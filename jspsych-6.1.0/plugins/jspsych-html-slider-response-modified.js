@@ -76,6 +76,12 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
                         default: jsPsych.NO_KEYS,
                         pretty_name: 'Key to end',
                         description: 'Key that will end the block presentation when pressed'
+                    },
+                    thumb: {
+                        type: jsPsych.plugins.parameterType.BOOL,
+                        pretty_name: 'Thumb',
+                        default: true,
+                        description: 'Will the thumb be shown at the beginning'
                     }
                 }
             },
@@ -99,14 +105,14 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
             },
             labels: {
                 type: jsPsych.plugins.parameterType.HTML_STRING,
-                pretty_name:'Labels',
+                pretty_name: 'Labels',
                 default: [],
                 array: true,
                 description: 'Labels of the slider.',
             },
             slider_width: {
                 type: jsPsych.plugins.parameterType.INT,
-                pretty_name:'Slider width',
+                pretty_name: 'Slider width',
                 default: null,
                 description: 'Width of the slider in pixels.'
             },
@@ -121,10 +127,10 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
 
     plugin.trial = function(display_element, trial) {
         /*
-        * Since it is impossible to access the slider thumb via DOM, the css of the slider will be changed each time.
-        * This function generates it.
-        */
-        var sliderCSS = function (c) {
+         * Since it is impossible to access the slider thumb via DOM, the css of the slider will be changed each time.
+         * This function generates it.
+         */
+        var sliderCSS = function(c, t) {
             return '' +
                 '.slider {' +
                 '  -webkit-appearance: none;' +
@@ -144,7 +150,8 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
                 '  width: 25px;' +
                 '  height: 25px;' +
                 '  border-radius: 50%;' +
-                '  background:'+c+';' +
+                '  visibility: ' + (t ? 'visible;' : 'hidden;') +
+                '  background:' + c + ';' +
                 '  cursor: pointer;' +
                 '}' +
                 '' +
@@ -152,29 +159,30 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
                 '  width: 25px;' +
                 '  height: 25px;' +
                 '  border-radius: 50%;' +
-                '  background:'+c+';' +
+                '  visibility: ' + (t ? 'visible;' : 'hidden;') +
+                '  background:' + c + ';' +
                 '  cursor: pointer;' +
                 '}'
         };
         //Add the css
-        var html = '<style data="thumb">'+sliderCSS('black')+'</style>';
+        var html = '<style data="thumb">' + sliderCSS('black', false) + '</style>';
         //Set the structure
         html += '<div id="jspsych-html-slider-response-wrapper" style="position: absolute; top: 50%; left:50%; height:625px; width:600px; transform: translate(-50%, -50%)">';
         html += '<div id="jspsych-html-slider-response-stimulus" style="position: relative; top:0%;">' + trial.stimulus + '</div>';
         html += '<div id="jspsych-html-slider-response-block" style="position:relative; top: 10px; height: 225px; width: 100%;">';
         html += '<div id="jspsych-html-slider-response-text" style="position: relative; top:0%; width: 100%; height: 70px;"></div>';
         html += '<div id="jspsych-html-slider-response-container" class="jspsych-html-slider-response-container" style="position:relative; margin: 0 auto 3em auto; visibility:hidden; ';
-        if(trial.slider_width !== null){
-            html += 'width:'+trial.slider_width+'px;';
+        if (trial.slider_width !== null) {
+            html += 'width:' + trial.slider_width + 'px;';
         }
         html += '">';
         html += '<input type="range" value="' + trial.blocks[0].start + '" min="' + trial.min + '" max="' + trial.max + '" step="' + trial.step + '" dir="' + trial.slider_dir + '" style="width: 100%;" id="jspsych-html-slider-response-response" class="slider"></input>';
         html += '<div>'
-        for(var j=0; j < trial.labels.length; j++){
-            var width = 100/(trial.labels.length-1);
-            var left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
-            html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
-            html += '<span style="text-align: center; font-size: 80%;" dir="ltr">'+trial.labels[j]+'</span>';
+        for (var j = 0; j < trial.labels.length; j++) {
+            var width = 100 / (trial.labels.length - 1);
+            var left_offset = (j * (100 / (trial.labels.length - 1))) - (width / 2);
+            html += '<div style="display: inline-block; position: absolute; left:' + left_offset + '%; text-align: center; width: ' + width + '%;">';
+            html += '<span style="text-align: center; font-size: 80%;" dir="ltr">' + trial.labels[j] + '</span>';
             html += '</div>'
         };
         html += '<div style="font-size: 20px%; height:20px; position: relative;">Selected value<br><span  id="slider-value" dir="ltr"></span></div>';
@@ -189,42 +197,47 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
         display_element.innerHTML = html;
 
 
-        display_element.querySelector('#jspsych-html-slider-response-response').addEventListener('input', function (e) {
+        display_element.querySelector('#jspsych-html-slider-response-response').addEventListener('input', function(e) {
             display_element.querySelector('#slider-value').innerHTML = e.target.value;
+            display_element.querySelector('[data="thumb"]').innerHTML = sliderCSS(trial.blocks[0].slider_color, true);
             responded = true;
+
         });
         //Set the variables needed for running the blocks and saving information.
         var responded;
         var keyboardListener;
         var response = [];
         var lastTime = performance.now();
+
         function nextBlock(i, info) {
-            if (i>0) { //Will not be executed on the first block
+            if (i > 0) { //Will not be executed on the first block
                 response.push({
-                    rt: performance.now()-lastTime,
+                    rt: performance.now() - lastTime,
                     slider: display_element.querySelector('#jspsych-html-slider-response-response').value
                 })
             }
-            if (i==trial.blocks.length) { //If we've been through all the blocks
+            if (i == trial.blocks.length) { //If we've been through all the blocks
                 end_trial();
                 return;
             }
             jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
             if (trial.blocks[i].duration != null) { //Set duration if needed
-                setTimeout(function () {nextBlock(i+1)}, trial.blocks[i].duration);
+                setTimeout(function() { nextBlock(i + 1) }, trial.blocks[i].duration);
             }
-            if (trial.blocks[i].key_press!=jsPsych.NO_KEYS) { //Set key to end block if needed
+            if (trial.blocks[i].key_press != jsPsych.NO_KEYS) { //Set key to end block if needed
                 responded = !trial.blocks[i].require_response;
+                display_element.querySelector('#press-space').style.visibility = 'visible'
+
                 function check_if_responded(i) {
-                    if (responded) {nextBlock(i); return;}
+                    if (responded) { nextBlock(i); return; }
                     display_element.querySelector('#error-msg').innerHTML = 'You must move the slider to continue';
                     display_element.querySelector('#error-msg').style.color = 'red';
-                    setTimeout(function () {
+                    setTimeout(function() {
                         display_element.querySelector('#error-msg').style.color = 'black'
                     }, 10);
                 }
                 keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-                    callback_function: function (info) {check_if_responded(i+1)},
+                    callback_function: function(info) { check_if_responded(i + 1) },
                     valid_responses: [trial.blocks[i].key_press],
                     rt_method: 'performance',
                     persist: true,
@@ -232,12 +245,15 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
                 });
             } else if (typeof keyboardListener !== "undefined") { //Kill previous keyboard-listener if exists
                 jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+                display_element.querySelector('#press-space').style.visibility = 'hidden'
+            } else {
+                display_element.querySelector('#press-space').style.visibility = 'hidden'
             }
             if (trial.blocks[i].slider) { //If the slider is visible
                 //calc starting value
-                var startFormula = (trial.blocks[i].start+'').replace(/\$\d+\$/, function (match) {
-                    var num = parseInt(match.slice(1,-1));
-                    return '('+response[num].slider+')';
+                var startFormula = (trial.blocks[i].start + '').replace(/\$\d+\$/, function(match) {
+                    var num = parseInt(match.slice(1, -1));
+                    return '(' + response[num].slider + ')';
                 });
                 startFormula = eval(startFormula);
                 //Set the elements
@@ -245,20 +261,21 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
                 display_element.querySelector('#additional-messages').style.visibility = 'visible';
                 display_element.querySelector('#jspsych-html-slider-response-response').value = startFormula;
                 display_element.querySelector('#error-msg').innerHTML = '';
-                display_element.querySelector('#slider-value').innerHTML = display_element.querySelector('#jspsych-html-slider-response-response').value;
-                display_element.querySelector('[data="thumb"]').innerHTML = sliderCSS(trial.blocks[i].slider_color);
+                display_element.querySelector('#slider-value').innerHTML = trial.blocks[i].thumb ? display_element.querySelector('#jspsych-html-slider-response-response').value : '';
+                display_element.querySelector('[data="thumb"]').innerHTML = sliderCSS(trial.blocks[i].slider_color, trial.blocks[i].thumb);
                 display_element.querySelector('#jspsych-html-slider-response-response').disabled = trial.blocks[i].locked;
-            }
-            else { //Hide the slider if needed
+            } else { //Hide the slider if needed
+                display_element.querySelector('[data="thumb"]').innerHTML = sliderCSS(trial.blocks[i].slider_color, false);
                 display_element.querySelector('#jspsych-html-slider-response-container').style.visibility = 'hidden';
                 display_element.querySelector('#additional-messages').style.visibility = 'hidden';
+                display_element.querySelector('#press-space').style.visibility = 'hidden'
 
             } //Show text
             display_element.querySelector('#jspsych-html-slider-response-text').innerHTML = trial.blocks[i].text;
             lastTime = performance.now();
         }
 
-        function end_trial(){ //end the trial
+        function end_trial() { //end the trial
             if (typeof keyboardListener !== 'undefined') { //kill listener
                 jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
             }
@@ -266,7 +283,7 @@ jsPsych.plugins['html-slider-response-modified'] = (function() {
 
             // save data
             var trialdata = {
-                "response": response,
+                "response": JSON.stringify(response),
                 "stimulus": trial.stimulus
             };
             //clean display element

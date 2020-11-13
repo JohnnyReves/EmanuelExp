@@ -1,0 +1,46 @@
+exp_part,index,rt,response,stimulus,valence,feedback,person,fullscreen_element
+,1764,,,,,,,
+Gender question,4806,3037.449999999808,Woman,,,,,HTML
+Instructions,5657,846.2500000023283,,,,,,HTML
+Instructions,5799,140.30999999886262,,,,,,HTML
+Instructions,5927,126.98500000260537,,,,,,HTML
+Instructions,6044,116.42000000210828,,,,,,HTML
+Instructions,6163,117.76000000099884,,,,,,HTML
+Instructions,6289,125.09499999941909,,,,,,HTML
+Instructions,6417,126.9300000021758,,,,,,HTML
+Instructions,6531,113.13499999960186,,,,,,HTML
+fixation,7282,null,,,,,,HTML
+First cond trial,9429,1140.5650000015157,-79,6350,Negative,,,HTML
+fixation,11182,null,,,,,,HTML
+First cond trial,12837,649.8200000023644,83,5760,Positive,,,HTML
+,13839,,,,,,,
+Instructions,14247,406.8100000004051,,,,,,HTML
+Instructions,14405,156.18500000346103,,,,,,HTML
+fixation,15156,null,,,,,,HTML
+Self cond trial,18776,1540.5299999983981,-84,exm1,Negative,,,HTML
+fixation,20528,null,,,,,,HTML
+other cond trial,23642,71,71,exm2,Negative,71,,HTML
+Instructions,25255,611.205000001064,,,,,,HTML
+fixation,26007,null,,,,,,HTML
+Self cond trial,29117,718.5749999989639,77,4628,Positive,,,HTML
+fixation,30869,null,,,,,,HTML
+other cond trial,34491,-66,-66,1590,Positive,-66,,HTML
+Instructions,35982,488.39500000030966,,,,,,HTML
+fixation,36733,null,,,,,,HTML
+Stage 3 Show Images,41238,,"[{""rt"":3999.7049999983574,""slider"":""72""}]",4626,,,Anna,HTML
+Stage 3 Show Images,46242,,"[{""rt"":3999.6849999988626,""slider"":""54""}]",5200,,,Anna,HTML
+Stage 3 Show Images,51247,,"[{""rt"":3999.729999999545,""slider"":""48""}]",8499,,,Anna,HTML
+Stage 3 Show Images,56251,,"[{""rt"":3999.660000001313,""slider"":""55""}]",8032,,,Anna,HTML
+Stage 3 Show Images,61256,,"[{""rt"":3999.69499999861,""slider"":""66""}]",2222,,,Anna,HTML
+likeable,66384,1457.6499999966472,80,,,,Anna,HTML
+trustworthy,66384,434.3250000019907,80,,,,Anna,HTML
+competence,66384,728.7799999976414,85,,,,Anna,HTML
+fixation,68137,null,,,,,,HTML
+Stage 3 Show Images,72642,,"[{""rt"":3999.69499999861,""slider"":""100""}]",8158,,,Mila,HTML
+Stage 3 Show Images,77646,,"[{""rt"":3999.4900000019697,""slider"":""100""}]",1460,,,Mila,HTML
+Stage 3 Show Images,82651,,"[{""rt"":3999.729999999545,""slider"":""100""}]",5800,,,Mila,HTML
+Stage 3 Show Images,87655,,"[{""rt"":3999.71000000005,""slider"":""100""}]",1812,,,Mila,HTML
+Stage 3 Show Images,92660,,"[{""rt"":3999.7350000012375,""slider"":""97""}]",2080,,,Mila,HTML
+likeable,97827,1120.4450000004726,32,,,,Mila,HTML
+trustworthy,97827,684.1249999997672,14,,,,Mila,HTML
+competence,97827,855.5999999989581,71,,,,Mila,HTML

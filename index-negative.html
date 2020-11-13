@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -29,16 +29,14 @@
         //TEMP - choosing gender
         var gender = (Math.floor(Math.random() * 2) == 0) ? 'Male' : 'Female';
         //Create experiment objects
-        var stage1Objects = FASTMODE ? [TRAINING_NEG_IMAGES_OBJS[0], TRAINING_POS_IMAGES_OBJS[0]] :
-            (TRAINING_POS_IMAGES_OBJS.slice(0, STAGE_1_TRIALS_NUM)).concat(TRAINING_NEG_IMAGES_OBJS.slice(0, STAGE_1_TRIALS_NUM));
+        var stage1Objects = FASTMODE ? jsPsych.randomization.repeat([TRAINING_NEG_IMAGES_OBJS[0], TRAINING_POS_IMAGES_OBJS[0]], 1) :
+            jsPsych.randomization.repeat((TRAINING_POS_IMAGES_OBJS.slice(0, STAGE_1_TRIALS_NUM)).concat(TRAINING_NEG_IMAGES_OBJS.slice(0, STAGE_1_TRIALS_NUM)), 1);
         var stage2Objects = FASTMODE ? {
-            other: [POSITIVE_IMAGES_OBJS[0], NEGATIVE_IMAGES_OBJS[0]],
-            self: [POSITIVE_IMAGES_OBJS[1], NEGATIVE_IMAGES_OBJS[1]]
+            other: [NEGATIVE_IMAGES_OBJS[0]],
+            self: [NEGATIVE_IMAGES_OBJS[1]]
         } : {
-            other: POSITIVE_IMAGES_OBJS.slice(0, (STAGE_2_TRIALS_NUM)).
-            concat(NEGATIVE_IMAGES_OBJS.slice(0, (STAGE_2_TRIALS_NUM))),
-            self: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM, (STAGE_2_TRIALS_NUM * 2)).
-            concat(NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM, (STAGE_2_TRIALS_NUM * 2)))
+            other: NEGATIVE_IMAGES_OBJS.slice(0, (STAGE_2_TRIALS_NUM)),
+            self: NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM, (STAGE_2_TRIALS_NUM * 2))
         };
         var stage3Object = [{
             cond: -1,
@@ -48,14 +46,6 @@
             cond: 1,
             valence: 'neg',
             images: NEGATIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM, STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM * 2)
-        }, {
-            cond: -1,
-            valence: 'pos',
-            images: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM * 2, STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM)
-        }, {
-            cond: 1,
-            valence: 'pos',
-            images: POSITIVE_IMAGES_OBJS.slice(STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM, STAGE_2_TRIALS_NUM * 2 + STAGE_3_TRIALS_NUM * 2)
         }];
 
         //Initializing variables
@@ -74,9 +64,11 @@
     <script src="jspsych-6.1.0/plugins/jspsych-html-slider-response-modified.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-call-function.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-survey-multi-choice.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
     <script src="logic.js"></script>
     <script src="Slides.js"></script>
     <script src="instruction_slides.js"></script>
+
     <link rel="stylesheet" href="jspsych-6.1.0/css/jspsych.css" />
 </head>
 
@@ -130,10 +122,16 @@
             name: "Roy Boy"
         }]
 
+        var exitFullScreen = {
+            type: 'fullscreen',
+            fullscreen_mode: false
+        }
+
+
         timeline = [firstSlide, genderQuestion, secondSlide, thirdSlide, thirdSlide1, thirdSlide2, fourthSlide, fifthSlide, fifthSlide1, sixthSlide, Stage1Full,
             calculateFirstCondDiffenece, seventhSlide, seventhSlide1, selfCond(examples[0]),
             otherCond(examples[1]), seventhSlide2,
-            Stage2Full, eightSlide, Stage3Full, ninethSlide
+            Stage2Full, eightSlide, Stage3Full, exitFullScreen, ninethSlide
         ];
         jsPsych.init({
             timeline: timeline,
